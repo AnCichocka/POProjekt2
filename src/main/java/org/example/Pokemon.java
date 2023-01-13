@@ -34,7 +34,7 @@ public class Pokemon implements IPositionChangeObserver {
         Vector2d newPosition = this.position;
         Vector2d unitVector;
 
-        System.out.println(direction);
+        System.out.println("DIRECTION: " + direction);
         switch (direction){
             case UP, RIGHT, LEFT, DOWN -> unitVector = direction.toUnitVector();
             default -> throw new IllegalArgumentException("you idiot enum mistake?");

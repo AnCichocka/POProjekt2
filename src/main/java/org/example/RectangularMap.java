@@ -20,7 +20,7 @@ public class RectangularMap implements IPositionChangeObserver{
 
     private Pokemon myPokemon;
 
-    RectangularMap(int width, int height, int numberOfPokemons, int numberOfRocks){
+    public RectangularMap(int width, int height, int numberOfPokemons, int numberOfRocks){
 
         this.width = width;
         this.height = height;
@@ -97,9 +97,9 @@ public class RectangularMap implements IPositionChangeObserver{
     //only when there is an obstacle
     public boolean place(Pokemon pokemon){
         if (this.canMoveTo(pokemon.getPosition())){
-            System.out.println(pokemon.getPosition());
+//            System.out.println(pokemon.getPosition());
             pokemons.put(pokemon.getPosition(), pokemon);
-            System.out.println("PLACED");
+//            System.out.println("PLACED");
             return true;
         }
         else {
