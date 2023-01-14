@@ -107,7 +107,7 @@ public class RectangularMap implements IPositionChangeObserver{
         }
     }
     public void placeObstacle(IMapObstacle obstacle){
-        obstacles.put(obstacle.getPositon(), obstacle);
+        obstacles.put(obstacle.getPosition(), obstacle);
     }
     boolean isBlocked(Vector2d position){
         return obstacles.get(position) != null;

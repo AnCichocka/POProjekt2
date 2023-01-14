@@ -1,5 +1,5 @@
 package org.example;
 
-public interface IMapObstacle {
+public interface IMapElement {
     Vector2d getPosition();
 }

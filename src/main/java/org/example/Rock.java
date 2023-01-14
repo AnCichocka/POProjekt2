@@ -1,6 +1,6 @@
 package org.example;
 
-public class Rock implements IMapObstacle {
+public class Rock implements IMapObstacle, IMapElement {
     private final Vector2d position;
     public Rock(Vector2d position){
         this.position = position;
@@ -12,7 +12,7 @@ public class Rock implements IMapObstacle {
     }
 
     @Override
-    public Vector2d getPositon() {
+    public Vector2d getPosition() {
         return this.position;
     }
 }

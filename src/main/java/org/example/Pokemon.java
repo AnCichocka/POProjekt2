@@ -3,11 +3,12 @@ package org.example;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Pokemon implements IPositionChangeObserver {
+public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObserver {
 
     int level;
     private Vector2d position;
-    private final ArrayList<IPositionChangeObserver> observers;
+    private final ArrayList<IPositionChangeObserver> observersMove;
+    private final ArrayList<IFightObserver> observersFight;
     private final RectangularMap map;
     public Vector2d getPosition() {
         return position;
@@ -17,16 +18,19 @@ public class Pokemon implements IPositionChangeObserver {
         this(position, map, 1);
     }
     public Pokemon(Vector2d position, RectangularMap map, int level){
+
         this.position = position;
         this.map = map;
         this.level = level;
-        this.observers = new ArrayList<>();
-        this.observers.add(map);
+        this.observersFight = new ArrayList<>();
+        this.observersMove = new ArrayList<>();
+
+        this.addMoveObserver(map);
     }
 
     @Override
     public String toString(){
-        return "%d".formatted(this.level);
+        return "lvl. %d".formatted(this.level);
     }
 
     public void move(MoveDirection direction){
@@ -43,12 +47,16 @@ public class Pokemon implements IPositionChangeObserver {
         newPosition = newPosition.add(unitVector);
         if(map.canMoveTo(newPosition)){
             if(map.willBeFight(newPosition)){
-                System.out.println("FIGHT----------------------------------------------");
+                this.fightStart(this, (Pokemon) map.objectAt(newPosition));
+//                FightView fightView = new FightView();
+//                fightView.createFightScene();
                 //czy pokemony, które pokonaliśmy powinny znikać z mapy? - mogą
             }
-            this.positionChanged(this.position, newPosition);
-            this.position = newPosition;
-            System.out.println(map);
+            else{
+                this.positionChanged(this.position, newPosition);
+                this.position = newPosition;
+                System.out.println(map);
+            }
         }
         else{
             System.out.println("BLOCKED OR OUTSIDE------------------------------------------------");
@@ -73,7 +81,7 @@ public class Pokemon implements IPositionChangeObserver {
         for(int i = -1; i <= 1; i++){
             for(int j = -1; j <= 1; j++){
                 Vector2d positionToCheck = this.position.add(new Vector2d(i,j));
-                if(map.canMoveTo(positionToCheck) && !(i == 0 && j == 0)){
+                if(map.canMoveTo(positionToCheck) && !(i == 0 && j == 0) && !map.willBeFight(positionToCheck)){
                     possibleNewPositions.add(positionToCheck);
                 }
             }
@@ -88,10 +96,23 @@ public class Pokemon implements IPositionChangeObserver {
         positionChanged(this.position, newPosition);
         this.position = newPosition;
     }
+    public void addMoveObserver(IPositionChangeObserver observer){
+        observersMove.add(observer);
+    }
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
-        for(IPositionChangeObserver observer : observers){
+        for(IPositionChangeObserver observer : observersMove){
             observer.positionChanged(oldPosition, newPosition);
+        }
+    }
+    public void addFightObserver(IFightObserver observer){
+        observersFight.add(observer);
+    }
+    @Override
+    public void fightStart(Pokemon myPokemon, Pokemon wildPokemon) {
+        System.out.println("FIGHT START");
+        for(IFightObserver observer : observersFight){
+            observer.fightStart(myPokemon, wildPokemon);
         }
     }
 }
