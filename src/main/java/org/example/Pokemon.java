@@ -32,14 +32,13 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         this.observersFight = new ArrayList<>();
         this.observersMove = new ArrayList<>();
         this.lifePoints = 100;
-        this.species = PokemonSpecies.BULBASAUR;
+        this.species = PokemonSpecies.randomPokemonSpecies();
 
         this.addMoveObserver(map);
     }
-
     @Override
     public String toString(){
-        return "lvl. %d".formatted(this.level);
+        return "%s".formatted(this.level);
     }
 
     public void move(MoveDirection direction){

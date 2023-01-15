@@ -1,8 +1,12 @@
 package org.example;
 
+import java.util.Random;
+
 public enum PokemonSpecies {
     PIPLUP,
     BULBASAUR;
+
+    private static final Random RANDOM = new Random();
 
     @Override
     public String toString(){
@@ -32,5 +36,20 @@ public enum PokemonSpecies {
         };
 
         return path;
+    }
+
+    public PokemonAttack[] getPokemonAttacks(){
+
+        PokemonAttack[] attacks = switch(this){
+            case PIPLUP -> new PokemonAttack[]{PokemonAttack.POOR_NEUTRAL, PokemonAttack.PUSH_SOME_WATER, PokemonAttack.WATERFALL};
+            case BULBASAUR -> new PokemonAttack[]{PokemonAttack.PREATTY_NEUTRAL, PokemonAttack.POWERFULL_NEUTRAL, PokemonAttack.PULL_OUT_WEED};
+        };
+        return attacks;
+    }
+
+
+    public static PokemonSpecies randomPokemonSpecies()  {
+        PokemonSpecies[] directions = values();
+        return directions[RANDOM.nextInt(directions.length)];
     }
 }

@@ -17,6 +17,9 @@ public class RectangularMap implements IPositionChangeObserver{
     public Pokemon getMyPokemon() {
         return myPokemon;
     }
+    public Pokemon getBossPokemon() {
+        return bossPokemon;
+    }
 
     private Pokemon myPokemon;
 

@@ -3,7 +3,11 @@ package org.example;
 public enum PokemonAttack {
     PULL_OUT_WEED,
     PUSH_SOME_WATER,
-    POOR_NEUTRAL;
+    WATERFALL,
+    POOR_NEUTRAL,
+    PREATTY_NEUTRAL,
+    POWERFULL_NEUTRAL;
+
 
     @Override
     public String toString(){
@@ -11,7 +15,10 @@ public enum PokemonAttack {
         String message = switch(this){
             case PULL_OUT_WEED -> "pull out weed";
             case PUSH_SOME_WATER -> "push some water";
+            case WATERFALL -> "waterfall";
             case POOR_NEUTRAL -> "poor neutral";
+            case PREATTY_NEUTRAL -> "preatty neutal";
+            case POWERFULL_NEUTRAL -> "powerful neutral";
         };
 
         return message;
@@ -21,8 +28,8 @@ public enum PokemonAttack {
 
         PokemonAttackType attackType = switch(this){
             case PULL_OUT_WEED -> PokemonAttackType.GRASS;
-            case PUSH_SOME_WATER -> PokemonAttackType.WATER;
-            case POOR_NEUTRAL -> PokemonAttackType.NEUTRAL;
+            case PUSH_SOME_WATER, WATERFALL -> PokemonAttackType.WATER;
+            case POOR_NEUTRAL, PREATTY_NEUTRAL, POWERFULL_NEUTRAL -> PokemonAttackType.NEUTRAL;
         };
 
         return attackType;
@@ -33,7 +40,10 @@ public enum PokemonAttack {
         int damagePoints = switch(this){
             case PULL_OUT_WEED -> 20;
             case PUSH_SOME_WATER -> 10;
+            case WATERFALL -> 25;
             case POOR_NEUTRAL -> 5;
+            case PREATTY_NEUTRAL -> 10;
+            case POWERFULL_NEUTRAL -> 20;
         };
 
         return damagePoints;

@@ -15,6 +15,12 @@ public class Main {
 //
 //        attack.getDamageToType(pokemonFire);
 
+//        Pokemon pokemon = new Pokemon(PokemonSpecies.randomPokemonSpecies());
+//
+//        for(PokemonAttack attack : pokemon.getSpecies().getPokemonAttacks()){
+//            System.out.println("attack: " + attack);
+//        }
+
     }
 }
 
