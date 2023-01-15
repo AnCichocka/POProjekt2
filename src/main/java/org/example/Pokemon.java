@@ -5,6 +5,13 @@ import java.util.Random;
 
 public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObserver {
 
+    int lifePoints;
+
+    public PokemonSpecies getSpecies() {
+        return species;
+    }
+
+    PokemonSpecies species;
     int level;
     private Vector2d position;
     private final ArrayList<IPositionChangeObserver> observersMove;
@@ -24,6 +31,8 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         this.level = level;
         this.observersFight = new ArrayList<>();
         this.observersMove = new ArrayList<>();
+        this.lifePoints = 100;
+        this.species = PokemonSpecies.BULBASAUR;
 
         this.addMoveObserver(map);
     }

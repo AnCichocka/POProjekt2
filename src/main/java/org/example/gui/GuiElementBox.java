@@ -5,8 +5,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import org.example.IMapElement;
 import org.example.Pokemon;
 
@@ -24,10 +22,10 @@ public class GuiElementBox {
             String path = null;
 
             if(element instanceof Pokemon){
-                path = "src/main/piplup.png";
+                path = ((Pokemon) element).getSpecies().getImagePath();
             }
             else{
-                path = "src/main/bulbasaur.png";
+                path = "src/main/resources/rock.png";
             }
             Image image = new Image(new FileInputStream(path));
             imageView = new ImageView(image);
