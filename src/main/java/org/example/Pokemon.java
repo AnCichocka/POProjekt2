@@ -6,17 +6,16 @@ import java.util.Random;
 public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObserver {
 
     int lifePoints;
-
-    public PokemonSpecies getSpecies() {
-        return species;
-    }
-
     PokemonSpecies species;
+    private PokemonAttack[] attacks;
     int level;
     private Vector2d position;
     private final ArrayList<IPositionChangeObserver> observersMove;
     private final ArrayList<IFightObserver> observersFight;
     private final RectangularMap map;
+    public PokemonSpecies getSpecies() {
+        return species;
+    }
     public Vector2d getPosition() {
         return position;
     }
@@ -24,6 +23,11 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
     public Pokemon(Vector2d position, RectangularMap map){
         this(position, map, 1);
     }
+
+    public int getLifePoints() {
+        return lifePoints;
+    }
+
     public Pokemon(Vector2d position, RectangularMap map, int level){
 
         this.position = position;
@@ -33,6 +37,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         this.observersMove = new ArrayList<>();
         this.lifePoints = 100;
         this.species = PokemonSpecies.randomPokemonSpecies();
+        this.attacks = this.species.getPokemonAttacks();
 
         this.addMoveObserver(map);
     }
@@ -122,5 +127,20 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         for(IFightObserver observer : observersFight){
             observer.fightStart(myPokemon, wildPokemon);
         }
+    }
+    public void attack(Pokemon pokemon, int attackIndex){
+
+        System.out.println("before: " + pokemon.lifePoints);
+        PokemonAttack attack = attacks[attackIndex];
+        int damagePoints = attack.getDamageToType(pokemon.getSpecies().getPokemonSpeciesType());
+        pokemon.setLifePoints(pokemon, pokemon.getLifePoints() - damagePoints);
+        System.out.println("after: " + pokemon.lifePoints);
+    }
+
+    private void setLifePoints(Pokemon pokemon, int lifePoints){
+        pokemon.lifePoints = lifePoints;
+    }
+    public boolean isDead(){
+        return this.lifePoints <= 0;
     }
 }

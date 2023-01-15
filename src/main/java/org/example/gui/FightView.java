@@ -1,5 +1,6 @@
 package org.example.gui;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,6 +19,9 @@ import java.io.FileNotFoundException;
 
 public class FightView implements IFightObserver {
 
+    private Pokemon myPokemon;
+    private Pokemon wildPokemon;
+    private VBox fightSceneContainer;
     static final int IMAGE_SIZE = 400;
     static final int FIGHT_SCENE_WIDTH = 1200;
     static final int FIGHT_SCENE_HEIGHT = 700;
@@ -29,31 +33,46 @@ public class FightView implements IFightObserver {
     static final int POKEMON_NAME_SIZE = 30;
     static final int POKEMON_LIFE_SIZE = 20;
     static final int POKEMON_CONTAINER_SPACING = 20;
-    public void createFightScene(Pokemon myPokemon, Pokemon wildPokemon){
+    public void getFightScene(){
 
-        HBox pokemonsContainer = this.getPokemonsContainer(myPokemon, wildPokemon);
+        this.fightSceneContainer = new VBox();
 
-        Text title = new Text("FIGHT IN PROGRESS");
-        title.setFont(new Font(30));
+        createFightScene();
 
-        VBox fightSceneContainer = new VBox(title, pokemonsContainer);
-        fightSceneContainer.setAlignment(Pos.CENTER);
-        fightSceneContainer.setSpacing(FIGHT_SCENE_SPACING);
-
-        Scene scene = new Scene(fightSceneContainer,FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT);
+        Scene scene = new Scene(this.fightSceneContainer,FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT);
         Stage stage = new Stage();
 
         stage.setScene(scene);
         stage.show();
     }
+    public void createFightScene(){
+
+        HBox pokemonsContainer = this.getPokemonsContainer();
+
+        Text title = new Text("FIGHT IN PROGRESS");
+        title.setFont(new Font(30));
+
+        this.fightSceneContainer.getChildren().add(title);
+        this.fightSceneContainer.getChildren().add(pokemonsContainer);
+        //= new VBox(title, pokemonsContainer);
+
+        fightSceneContainer.setAlignment(Pos.CENTER);
+        fightSceneContainer.setSpacing(FIGHT_SCENE_SPACING);
+
+//        Scene scene = new Scene(fightSceneContainer,FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT);
+//        Stage stage = new Stage();
+//
+//        stage.setScene(scene);
+//        stage.show();
+    }
     private Background getBackgroundOfColor(Color color){
         BackgroundFill background_fill = new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY);
         return new Background(background_fill);
     }
-    private HBox getPokemonsContainer(Pokemon myPokemon, Pokemon wildPokemon){
+    private HBox getPokemonsContainer(){
 
-        VBox pokemon1Container = this.getPokemonContainer(myPokemon.getSpecies().getImagePath());
-        VBox pokemon2Container = this.getPokemonContainer(wildPokemon.getSpecies().getImagePath());
+        VBox pokemon1Container = this.getPokemonContainer(myPokemon);
+        VBox pokemon2Container = this.getPokemonContainer(wildPokemon);
 
         VBox attackButtonsContainer = this.getAttackButtonsContainer();
 
@@ -65,18 +84,18 @@ public class FightView implements IFightObserver {
 
         return pokemonsContainer;
     }
-    private VBox getPokemonContainer(String imgPath){
+    private VBox getPokemonContainer(Pokemon pokemon){
 
         try{
-            Image image = new Image(new FileInputStream(imgPath));
+            Image image = new Image(new FileInputStream(pokemon.getSpecies().getImagePath()));
             ImageView pokemonImg = new ImageView(image);
             pokemonImg.setFitWidth(IMAGE_SIZE);
             pokemonImg.setFitHeight(IMAGE_SIZE);
 
-            Text pokemonName = new Text("name");
+            Text pokemonName = new Text(pokemon.getSpecies().toString());
             pokemonName.setFont(new Font(POKEMON_NAME_SIZE));
 
-            Text pokemonLife = new Text("life");
+            Text pokemonLife = new Text(String.valueOf(pokemon.getLifePoints()));
             pokemonLife.setFont(new Font(POKEMON_LIFE_SIZE));
 
             VBox pokemonContainer = new VBox(pokemonName, pokemonImg, pokemonLife);
@@ -99,27 +118,71 @@ public class FightView implements IFightObserver {
 
     }
     private VBox getAttackButtonsContainer(){
-        Button button1 = new Button("attack 1");
-        Button button2 = new Button("attack 2");
-        Button button3 = new Button("attack 3");
 
-        button1.setFont(new Font(ATTACK_BUTTON_FONT_SIZE));
-        button2.setFont(new Font(ATTACK_BUTTON_FONT_SIZE));
-        button3.setFont(new Font(ATTACK_BUTTON_FONT_SIZE));
-
-        button1.setPadding(new Insets(ATTACK_BUTTON_PADDING));
-        button2.setPadding(new Insets(ATTACK_BUTTON_PADDING));
-        button3.setPadding(new Insets(ATTACK_BUTTON_PADDING));
+        Button button1 = getAttackButton(0);
+        Button button2 = getAttackButton(1);
+        Button button3 = getAttackButton(2);
 
         VBox attackButtonsContainer = new VBox(button1, button2, button3);
+
         attackButtonsContainer.setSpacing(ATTACK_BUTTONS_SPACING);
         attackButtonsContainer.setAlignment(Pos.CENTER);
 
         return attackButtonsContainer;
     }
+    public Button getAttackButton(int attackIndex){
+
+        Button button = new Button(myPokemon.getSpecies().getPokemonAttacks()[attackIndex].toString());
+
+        button.setFont(new Font(ATTACK_BUTTON_FONT_SIZE));
+        button.setPadding(new Insets(ATTACK_BUTTON_PADDING));
+
+        //eventListeners
+        button.setOnAction(event -> {
+            //System.out.println(attackIndex + "clicked");
+            myPokemon.attack(wildPokemon, attackIndex);
+
+            if(wildPokemon.isDead()){
+//                this.fightSceneContainer.getChildren().clear();
+//                createEndFightScene();
+            }
+            else{
+                refresh();
+            }
+
+        });
+
+        return button;
+    }
     @Override
     public void fightStart(Pokemon myPokemon, Pokemon wildPokemon) {
-        createFightScene(myPokemon, wildPokemon);
+
+        this.myPokemon = myPokemon;
+        this.wildPokemon = wildPokemon;
+
+        getFightScene();
+    }
+
+    public void refresh() {
+        Platform.runLater( () -> {
+            //getFightScene();
+            this.fightSceneContainer.getChildren().clear();
+            createFightScene();
+        });
+    }
+
+    private void createEndFightScene(){
+        HBox pokemonsContainer = this.getPokemonsContainer();
+
+        Text title = new Text("FIGHT IN PROGRESS");
+        title.setFont(new Font(30));
+
+        this.fightSceneContainer.getChildren().add(title);
+        this.fightSceneContainer.getChildren().add(pokemonsContainer);
+        //= new VBox(title, pokemonsContainer);
+
+        fightSceneContainer.setAlignment(Pos.CENTER);
+        fightSceneContainer.setSpacing(FIGHT_SCENE_SPACING);
     }
 }
 
