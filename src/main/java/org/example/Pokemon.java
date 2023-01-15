@@ -129,7 +129,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         }
     }
     @Override
-    public void fightEnded() {
+    public void fightEnded(Pokemon deadPokemon) {
         //TODO: deal with dead pokemon
     }
     public void attack(Pokemon pokemon, int attackIndex){

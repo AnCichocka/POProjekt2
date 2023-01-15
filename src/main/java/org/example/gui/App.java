@@ -27,7 +27,9 @@ public class App extends Application implements IFightObserver {
             this.map = map;
 
             FightView fightView = new FightView();
+
             fightView.addFightObserver(this);
+            fightView.addFightObserver(this.map);
 
             this.mapView = new MapView(width, height, map);
 
@@ -63,12 +65,12 @@ public class App extends Application implements IFightObserver {
                 }
 
                 if(direction != null){
+
                     myPokemon.move(direction);
 
-
-
-                    // IF NOT FIGHT
-                    map.moveWildPokemons();
+                    if(!fightInProgress){
+                        map.moveWildPokemons();
+                    }
                     this.mapView.refresh();
                 }
             }
@@ -92,7 +94,8 @@ public class App extends Application implements IFightObserver {
     }
 
     @Override
-    public void fightEnded(){
+    public void fightEnded(Pokemon deadPokemon){
         fightInProgress = false;
+        this.mapView.refresh();
     }
 }

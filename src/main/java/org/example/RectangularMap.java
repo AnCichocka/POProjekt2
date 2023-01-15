@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.*;
 
-public class RectangularMap implements IPositionChangeObserver{
+public class RectangularMap implements IPositionChangeObserver, IFightObserver{
 
     private final Vector2d lowerLeft;
     private final Vector2d upperRight;
@@ -156,5 +156,19 @@ public class RectangularMap implements IPositionChangeObserver{
                 pokemon.moveWildPokemon();
             }
         }
+    }
+
+    @Override
+    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
+
+    }
+
+    @Override
+    public void fightEnded(Pokemon deadPokemon) {
+        if(!Objects.equals(myPokemon, deadPokemon)){
+            pokemons.remove(deadPokemon.getPosition());
+        }
+        //TODO: add new pokemon on random place
+        //TODO: check if boss -> new boss
     }
 }

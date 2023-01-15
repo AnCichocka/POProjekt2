@@ -147,7 +147,7 @@ public class FightView implements IFightObserver {
                 this.titleText = "YOU WON THIS FIGHT";
                 this.fightSceneContainer.getChildren().clear();
                 refreshToEndFightView();
-                fightEnded();
+                fightEnded(wildPokemon);
             }
             else{
 
@@ -160,7 +160,7 @@ public class FightView implements IFightObserver {
                     this.titleText = "YOU LOSE THIS FIGHT";
                     this.fightSceneContainer.getChildren().clear();
                     refreshToEndFightView();
-                    fightEnded();
+                    fightEnded(myPokemon);
                 }
 
                 //fight still in progress
@@ -208,9 +208,9 @@ public class FightView implements IFightObserver {
     }
 
     @Override
-    public void fightEnded() {
+    public void fightEnded(Pokemon deadPokemon) {
         for(IFightObserver observer : observers){
-            observer.fightEnded();
+            observer.fightEnded(deadPokemon);
         }
     }
 
