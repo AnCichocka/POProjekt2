@@ -16,6 +16,7 @@ import org.example.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Random;
 
 public class FightView implements IFightObserver {
 
@@ -139,15 +140,30 @@ public class FightView implements IFightObserver {
             //System.out.println(attackIndex + "clicked");
             myPokemon.attack(wildPokemon, attackIndex);
 
+            //you win
             if(wildPokemon.isDead()){
                 this.titleText = "YOU WON THIS FIGHT";
                 this.fightSceneContainer.getChildren().clear();
                 refreshToEndFightView();
             }
             else{
-                refresh();
-            }
 
+                Random random = new Random();
+                int randomIndex = random.nextInt(0,3);
+                wildPokemon.attack(myPokemon, randomIndex);
+
+                //you loose
+                if(myPokemon.isDead()){
+                    this.titleText = "YOU LOSE THIS FIGHT";
+                    this.fightSceneContainer.getChildren().clear();
+                    refreshToEndFightView();
+                }
+
+                //fight still in progress
+                else{
+                    refresh();
+                }
+            }
         });
 
         return button;
@@ -162,6 +178,7 @@ public class FightView implements IFightObserver {
     }
 
     public void refresh() {
+
         Platform.runLater( () -> {
             this.fightSceneContainer.getChildren().clear();
             createFightScene();
@@ -169,6 +186,7 @@ public class FightView implements IFightObserver {
     }
 
     public void refreshToEndFightView() {
+
         Platform.runLater( () -> {
             this.fightSceneContainer.getChildren().clear();
             createFightScene();
@@ -176,6 +194,7 @@ public class FightView implements IFightObserver {
         });
     }
     private void getMiddleContainerBattleEnded(){
+
         this.middleContainer.getChildren().clear();
         Button button = new Button("END");
         this.middleContainer.getChildren().add(button);
