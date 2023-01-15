@@ -31,7 +31,6 @@ public class MapView {
         this.myPokemon = map.getMyPokemon();
         this.bossPokemon = map.getBossPokemon();
     }
-
     public Scene getMapScene(){
         this.gridPane = new GridPane();
 

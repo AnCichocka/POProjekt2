@@ -60,7 +60,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         newPosition = newPosition.add(unitVector);
         if(map.canMoveTo(newPosition)){
             if(map.willBeFight(newPosition)){
-                this.fightStart(this, (Pokemon) map.objectAt(newPosition));
+                this.fightStarted(this, (Pokemon) map.objectAt(newPosition));
 //                FightView fightView = new FightView();
 //                fightView.createFightScene();
                 //czy pokemony, które pokonaliśmy powinny znikać z mapy? - mogą
@@ -122,11 +122,15 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         observersFight.add(observer);
     }
     @Override
-    public void fightStart(Pokemon myPokemon, Pokemon wildPokemon) {
+    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
         System.out.println("FIGHT START");
         for(IFightObserver observer : observersFight){
-            observer.fightStart(myPokemon, wildPokemon);
+            observer.fightStarted(myPokemon, wildPokemon);
         }
+    }
+    @Override
+    public void fightEnded() {
+        //TODO: deal with dead pokemon
     }
     public void attack(Pokemon pokemon, int attackIndex){
 

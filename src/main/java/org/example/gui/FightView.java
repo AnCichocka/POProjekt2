@@ -16,6 +16,7 @@ import org.example.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class FightView implements IFightObserver {
@@ -25,6 +26,7 @@ public class FightView implements IFightObserver {
     private VBox fightSceneContainer;
     private VBox middleContainer;
     private String titleText;
+    private final ArrayList<IFightObserver> observers = new ArrayList();
     static final int IMAGE_SIZE = 400;
     static final int FIGHT_SCENE_WIDTH = 1200;
     static final int FIGHT_SCENE_HEIGHT = 700;
@@ -145,6 +147,7 @@ public class FightView implements IFightObserver {
                 this.titleText = "YOU WON THIS FIGHT";
                 this.fightSceneContainer.getChildren().clear();
                 refreshToEndFightView();
+                fightEnded();
             }
             else{
 
@@ -157,6 +160,7 @@ public class FightView implements IFightObserver {
                     this.titleText = "YOU LOSE THIS FIGHT";
                     this.fightSceneContainer.getChildren().clear();
                     refreshToEndFightView();
+                    fightEnded();
                 }
 
                 //fight still in progress
@@ -169,14 +173,13 @@ public class FightView implements IFightObserver {
         return button;
     }
     @Override
-    public void fightStart(Pokemon myPokemon, Pokemon wildPokemon) {
+    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
 
         this.myPokemon = myPokemon;
         this.wildPokemon = wildPokemon;
 
         getFightScene();
     }
-
     public void refresh() {
 
         Platform.runLater( () -> {
@@ -199,6 +202,18 @@ public class FightView implements IFightObserver {
         Button button = new Button("END");
         this.middleContainer.getChildren().add(button);
     }
+
+    public void addFightObserver(IFightObserver observer){
+        observers.add(observer);
+    }
+
+    @Override
+    public void fightEnded() {
+        for(IFightObserver observer : observers){
+            observer.fightEnded();
+        }
+    }
+
 }
 
 

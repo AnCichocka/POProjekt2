@@ -27,6 +27,8 @@ public class App extends Application implements IFightObserver {
             this.map = map;
 
             FightView fightView = new FightView();
+            fightView.addFightObserver(this);
+
             this.mapView = new MapView(width, height, map);
 
             this.myPokemon = map.getMyPokemon();
@@ -85,7 +87,12 @@ public class App extends Application implements IFightObserver {
     }
 
     @Override
-    public void fightStart(Pokemon myPokemon, Pokemon wildPokemon) {
+    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
         fightInProgress = true;
+    }
+
+    @Override
+    public void fightEnded(){
+        fightInProgress = false;
     }
 }
