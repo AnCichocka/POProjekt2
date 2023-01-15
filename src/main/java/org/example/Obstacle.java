@@ -1,6 +1,6 @@
 package org.example;
 
-public class Obstacle implements IMapObstacle, IMapElement {
+public class Obstacle implements IMapElement {
     private final Vector2d position;
     private final ObstacleType type;
     public Obstacle(Vector2d position){

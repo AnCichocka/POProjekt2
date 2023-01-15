@@ -77,14 +77,14 @@ public enum PokemonAttack {
             };
         };
 
-        System.out.println("attack type: " + getAttackType());
-        System.out.println("pokemon type: " + pokemonType);
-        System.out.println("percentage: " + percentageOfDamage);
-        System.out.println("before attack points: " + damagePoints);
+//        System.out.println("attack type: " + getAttackType());
+//        System.out.println("pokemon type: " + pokemonType);
+//        System.out.println("percentage: " + percentageOfDamage);
+//        System.out.println("before attack points: " + damagePoints);
 
         damagePoints = (int)Math.ceil(damagePoints * percentageOfDamage);
-        System.out.println("after damage points: " + damagePoints);
-        System.out.println();
+//        System.out.println("after damage points: " + damagePoints);
+//        System.out.println();
 
         return damagePoints;
     }

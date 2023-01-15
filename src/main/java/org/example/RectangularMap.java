@@ -8,10 +8,10 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
     private final Vector2d upperRight;
     private final int width;
     private final int height;
-    private MapVisualizer visualizer;
-    private Map<Vector2d, Pokemon> pokemons;
-    private Map<Vector2d, IMapObstacle> obstacles;
-    private ArrayList<Vector2d> freePositions;
+    private final MapVisualizer visualizer;
+    private final Map<Vector2d, Pokemon> pokemons;
+    private final Map<Vector2d, Obstacle> obstacles;
+    private final ArrayList<Vector2d> freePositions;
     private Pokemon bossPokemon;
 
     public Pokemon getMyPokemon() {
@@ -21,7 +21,7 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
         return bossPokemon;
     }
 
-    private Pokemon myPokemon;
+    private final Pokemon myPokemon;
 
     public RectangularMap(int width, int height, int numberOfPokemons, int numberOfRocks){
 
@@ -77,7 +77,7 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
 
         for(int i=0; i<n; i++){
             Vector2d position = getRandomFreePosition();
-            IMapObstacle obstacle = new Obstacle(position);
+            Obstacle obstacle = new Obstacle(position);
             this.placeObstacle(obstacle);
         }
     }
@@ -109,7 +109,7 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
             throw new IllegalArgumentException(pokemon.getPosition() + " is invalid position");
         }
     }
-    public void placeObstacle(IMapObstacle obstacle){
+    public void placeObstacle(Obstacle obstacle){
         obstacles.put(obstacle.getPosition(), obstacle);
     }
     boolean isBlocked(Vector2d position){
@@ -142,14 +142,11 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
         return pokemons.get(position) != null || obstacles.get(position) != null;
     }
     public void moveWildPokemons(){
-        ArrayList<Pokemon> pokemonsValues = new ArrayList<>();
 
         // robie to tylko po to, żeby nie wywalało mi błędu - zmiana iteratora podczas przechodzenia po strukturze
         //observer ogarnia zmiany dla pokemons
 
-        for(Pokemon pokemon : pokemons.values()){
-            pokemonsValues.add(pokemon);
-        }
+        ArrayList<Pokemon> pokemonsValues = new ArrayList<>(pokemons.values());
 
         for(Pokemon pokemon : pokemonsValues){
             if(!Objects.equals(pokemon, myPokemon) && !Objects.equals(pokemon, bossPokemon)){
