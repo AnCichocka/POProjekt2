@@ -77,7 +77,7 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
 
         for(int i=0; i<n; i++){
             Vector2d position = getRandomFreePosition();
-            IMapObstacle obstacle = new Rock(position);
+            IMapObstacle obstacle = new Obstacle(position);
             this.placeObstacle(obstacle);
         }
     }

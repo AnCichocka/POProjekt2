@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.example.IMapElement;
+import org.example.Obstacle;
 import org.example.Pokemon;
 
 import java.io.FileInputStream;
@@ -19,13 +20,13 @@ public class GuiElementBox {
 
     public GuiElementBox(IMapElement element){
         try{
-            String path = null;
+            String path ;
 
             if(element instanceof Pokemon){
-                path = ((Pokemon) element).getSpecies().getImagePath();
+                path = ((Pokemon) element).getImagePath();
             }
             else{
-                path = "src/main/resources/rock.png";
+                path = ((Obstacle) element).getImagePath();
             }
             Image image = new Image(new FileInputStream(path));
             imageView = new ImageView(image);

@@ -7,6 +7,11 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
 
     int lifePoints;
     PokemonSpecies species;
+
+    public PokemonAttack getAttackOfIndex(int index) {
+        return this.attacks[index];
+    }
+
     private PokemonAttack[] attacks;
     int level;
     private Vector2d position;
@@ -146,5 +151,8 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
     }
     public boolean isDead(){
         return this.lifePoints <= 0;
+    }
+    public String getImagePath(){
+        return this.species.getImagePath();
     }
 }

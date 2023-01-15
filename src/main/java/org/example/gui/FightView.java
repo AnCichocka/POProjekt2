@@ -38,6 +38,7 @@ public class FightView implements IFightObserver {
     static final int POKEMON_NAME_SIZE = 30;
     static final int POKEMON_LIFE_SIZE = 20;
     static final int POKEMON_CONTAINER_SPACING = 20;
+    static final int TITLE_FONT_SIZE = 30;
     public void getFightScene(){
 
         this.fightSceneContainer = new VBox();
@@ -55,8 +56,8 @@ public class FightView implements IFightObserver {
 
         HBox pokemonsContainer = this.getPokemonsContainer();
 
-        Text title = new Text(titleText);
-        title.setFont(new Font(30));
+        Text title = new Text(this.titleText);
+        title.setFont(new Font(TITLE_FONT_SIZE));
 
         this.fightSceneContainer.getChildren().add(title);
         this.fightSceneContainer.getChildren().add(pokemonsContainer);
@@ -132,7 +133,7 @@ public class FightView implements IFightObserver {
     }
     public Button getAttackButton(int attackIndex){
 
-        Button button = new Button(myPokemon.getSpecies().getPokemonAttacks()[attackIndex].toString());
+        Button button = new Button(myPokemon.getAttackOfIndex(attackIndex).toString());
 
         button.setFont(new Font(ATTACK_BUTTON_FONT_SIZE));
         button.setPadding(new Insets(ATTACK_BUTTON_PADDING));
