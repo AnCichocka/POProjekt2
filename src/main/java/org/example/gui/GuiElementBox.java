@@ -20,26 +20,33 @@ public class GuiElementBox {
 
     public GuiElementBox(IMapElement element){
         try{
-            String path ;
+            String path;
+            int level = -1;
 
             if(element instanceof Pokemon){
                 path = ((Pokemon) element).getImagePath();
+                level = ((Pokemon)element).getLevel();
             }
             else{
                 path = ((Obstacle) element).getImagePath();
             }
+
             Image image = new Image(new FileInputStream(path));
             imageView = new ImageView(image);
             imageView.setFitWidth(IMAGE_SIZE);
             imageView.setFitHeight(IMAGE_SIZE);
+
+            this.elementContainer = new VBox(imageView);
+            this.elementContainer.setAlignment(Pos.CENTER);
+
+            if(level != -1){
+                Label levelLabel = new Label("lvl. " + level);
+                this.elementContainer.getChildren().add(levelLabel);
+            }
         }
         catch (FileNotFoundException e){
             throw new RuntimeException(e);
         }
-
-        Label elementPosition = new Label(element.getPosition().toString());
-        this.elementContainer = new VBox(imageView, elementPosition);
-        this.elementContainer.setAlignment(Pos.CENTER);
     }
 
     public VBox getElementContainer(){

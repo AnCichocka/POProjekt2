@@ -23,6 +23,8 @@ public class FightView implements IFightObserver {
 
     private Pokemon myPokemon;
     private Pokemon wildPokemon;
+    private int myPokemonLife;
+    private int wildPokemonLife;
     private VBox fightSceneContainer;
     private VBox middleContainer;
     private String titleText;
@@ -72,8 +74,8 @@ public class FightView implements IFightObserver {
     }
     private HBox getPokemonsContainer(){
 
-        VBox pokemon1Container = this.getPokemonContainer(myPokemon);
-        VBox pokemon2Container = this.getPokemonContainer(wildPokemon);
+        VBox pokemon1Container = this.getPokemonContainer(myPokemon, this.myPokemonLife);
+        VBox pokemon2Container = this.getPokemonContainer(wildPokemon, this.wildPokemonLife);
 
         this.middleContainer = this.getAttackButtonsContainer();
 
@@ -85,7 +87,7 @@ public class FightView implements IFightObserver {
 
         return pokemonsContainer;
     }
-    private VBox getPokemonContainer(Pokemon pokemon){
+    private VBox getPokemonContainer(Pokemon pokemon, int lifePoints){
 
         try{
             Image image = new Image(new FileInputStream(pokemon.getSpecies().getImagePath()));
@@ -96,7 +98,7 @@ public class FightView implements IFightObserver {
             Text pokemonName = new Text(pokemon.getSpecies().toString());
             pokemonName.setFont(new Font(POKEMON_NAME_SIZE));
 
-            Text pokemonLife = new Text(String.valueOf(pokemon.getLifePoints()));
+            Text pokemonLife = new Text(String.valueOf(lifePoints));
             pokemonLife.setFont(new Font(POKEMON_LIFE_SIZE));
 
             VBox pokemonContainer = new VBox(pokemonName, pokemonImg, pokemonLife);
@@ -110,13 +112,6 @@ public class FightView implements IFightObserver {
         catch (FileNotFoundException e){
             throw new RuntimeException(e);
         }
-
-
-//        VBox pokemonImg = new VBox(new Text("POKEMON PHOTO 1"));
-//        pokemonImg.setMinWidth(POKEMON_WIDTH);
-//        pokemonImg.setMinHeight(POKEMON_HEIGHT);
-//        pokemonImg.setBackground(this.getBackgroundOfColor(Color.RED));
-
     }
     private VBox getAttackButtonsContainer(){
 
@@ -142,12 +137,17 @@ public class FightView implements IFightObserver {
         button.setOnAction(event -> {
             //System.out.println(attackIndex + "clicked");
             myPokemon.attack(wildPokemon, attackIndex);
+            this.wildPokemonLife = wildPokemon.getLifePoints();
 
             //you win
             if(wildPokemon.isDead()){
                 this.titleText = "YOU WON THIS FIGHT";
                 this.fightSceneContainer.getChildren().clear();
                 refreshToEndFightView();
+
+                myPokemon.regenerate();
+                wildPokemon.regenerate();
+
                 fightEnded(wildPokemon);
             }
             else{
@@ -155,12 +155,17 @@ public class FightView implements IFightObserver {
                 Random random = new Random();
                 int randomIndex = random.nextInt(0,3);
                 wildPokemon.attack(myPokemon, randomIndex);
+                this.myPokemonLife = myPokemon.getLifePoints();
 
                 //you loose
                 if(myPokemon.isDead()){
                     this.titleText = "YOU LOSE THIS FIGHT";
                     this.fightSceneContainer.getChildren().clear();
                     refreshToEndFightView();
+
+                    myPokemon.regenerate();
+                    wildPokemon.regenerate();
+
                     fightEnded(myPokemon);
                 }
 
@@ -173,11 +178,15 @@ public class FightView implements IFightObserver {
 
         return button;
     }
+
     @Override
     public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
 
         this.myPokemon = myPokemon;
         this.wildPokemon = wildPokemon;
+
+        this.myPokemonLife = myPokemon.getLifePoints();
+        this.wildPokemonLife = wildPokemon.getLifePoints();
 
         getFightScene();
     }

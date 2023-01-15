@@ -6,6 +6,7 @@ import java.util.Random;
 public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObserver {
 
     int lifePoints;
+    int maxLifePoints;
     PokemonSpecies species;
 
     public PokemonAttack getAttackOfIndex(int index) {
@@ -41,6 +42,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         this.observersFight = new ArrayList<>();
         this.observersMove = new ArrayList<>();
         this.lifePoints = 100;
+        this.maxLifePoints = 100;
         this.species = PokemonSpecies.randomPokemonSpecies();
         this.attacks = this.species.getPokemonAttacks();
 
@@ -154,5 +156,13 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
     }
     public String getImagePath(){
         return this.species.getImagePath();
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void regenerate(){
+        this.lifePoints = this.maxLifePoints;
     }
 }
