@@ -17,6 +17,7 @@ import org.example.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class FightView implements IFightObserver {
@@ -29,7 +30,6 @@ public class FightView implements IFightObserver {
     private VBox middleContainer;
     private String titleText;
     private final ArrayList<IFightObserver> observers = new ArrayList();
-    static final int IMAGE_SIZE = 400;
     static final int FIGHT_SCENE_WIDTH = 1200;
     static final int FIGHT_SCENE_HEIGHT = 700;
     static final int ATTACK_BUTTONS_SPACING = 20;
@@ -38,15 +38,27 @@ public class FightView implements IFightObserver {
     static final int FIGHT_SCENE_SPACING = 40;
     static final int POKEMONS_CONTAINER_SPACING = 60;
     static final int POKEMON_NAME_SIZE = 30;
+    static final int POKEMON_IMAGE_SIZE = 450;
     static final int POKEMON_LIFE_SIZE = 20;
     static final int POKEMON_CONTAINER_SPACING = 20;
-    static final int TITLE_FONT_SIZE = 30;
+    static final int TITLE_FONT_SIZE = 40;
+    static final int BUTTON_CONTIANER_WIDTH = 200;
+    static final int BUTTON_HEIGHT = 30;
     public void getFightScene(){
 
         this.fightSceneContainer = new VBox();
         this.titleText = "FIGHT IN PROGRESS";
 
         createFightScene();
+
+        String currentDir = System.getProperty("user.dir");
+        System.out.println("Current dir using System:" + currentDir);
+
+        BackgroundImage myBI = new BackgroundImage(new Image("background3.jpg",FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT,false,true),
+                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+//then you set to your node
+        fightSceneContainer.setBackground(new Background(myBI));
 
         Scene scene = new Scene(this.fightSceneContainer,FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT);
         Stage stage = new Stage();
@@ -83,7 +95,7 @@ public class FightView implements IFightObserver {
         pokemonsContainer.setAlignment(Pos.CENTER);
         pokemonsContainer.setSpacing(POKEMONS_CONTAINER_SPACING);
 
-        pokemonsContainer.setBackground(this.getBackgroundOfColor(Color.YELLOW));
+        //pokemonsContainer.setBackground(this.getBackgroundOfColor(Color.YELLOW));
 
         return pokemonsContainer;
     }
@@ -92,8 +104,13 @@ public class FightView implements IFightObserver {
         try{
             Image image = new Image(new FileInputStream(pokemon.getSpecies().getImagePath()));
             ImageView pokemonImg = new ImageView(image);
-            pokemonImg.setFitWidth(IMAGE_SIZE);
-            pokemonImg.setFitHeight(IMAGE_SIZE);
+            pokemonImg.setFitWidth(POKEMON_IMAGE_SIZE);
+            pokemonImg.setFitHeight(POKEMON_IMAGE_SIZE);
+
+            //zwróć w odpowiednią stronę
+            if(Objects.equals(pokemon, myPokemon)){
+                pokemonImg.setScaleX(-1);
+            }
 
             Text pokemonName = new Text(pokemon.getSpecies().toString());
             pokemonName.setFont(new Font(POKEMON_NAME_SIZE));
@@ -105,7 +122,7 @@ public class FightView implements IFightObserver {
             pokemonContainer.setAlignment(Pos.CENTER);
             pokemonContainer.setSpacing(POKEMON_CONTAINER_SPACING);
 
-            pokemonContainer.setBackground(getBackgroundOfColor(Color.RED));
+            //pokemonContainer.setBackground(getBackgroundOfColor(Color.RED));
 
             return pokemonContainer;
         }
@@ -120,6 +137,7 @@ public class FightView implements IFightObserver {
         Button button3 = getAttackButton(2);
 
         VBox attackButtonsContainer = new VBox(button1, button2, button3);
+        attackButtonsContainer.setPrefSize(BUTTON_CONTIANER_WIDTH, BUTTON_CONTIANER_WIDTH);
 
         attackButtonsContainer.setSpacing(ATTACK_BUTTONS_SPACING);
         attackButtonsContainer.setAlignment(Pos.CENTER);
@@ -132,6 +150,7 @@ public class FightView implements IFightObserver {
 
         button.setFont(new Font(ATTACK_BUTTON_FONT_SIZE));
         button.setPadding(new Insets(ATTACK_BUTTON_PADDING));
+        button.setPrefSize(BUTTON_CONTIANER_WIDTH, BUTTON_HEIGHT);
 
         //eventListeners
         button.setOnAction(event -> {
@@ -211,16 +230,9 @@ public class FightView implements IFightObserver {
         Platform.runLater( () -> {
             this.fightSceneContainer.getChildren().clear();
             createFightScene();
-            getMiddleContainerBattleEnded();
+            middleContainer.getChildren().clear();
         });
     }
-    private void getMiddleContainerBattleEnded(){
-
-        this.middleContainer.getChildren().clear();
-        Button button = new Button("END");
-        this.middleContainer.getChildren().add(button);
-    }
-
     public void addFightObserver(IFightObserver observer){
         observers.add(observer);
     }

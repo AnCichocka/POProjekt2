@@ -19,11 +19,11 @@ public class MapView {
     private final int width;
     private final RectangularMap map;
     private GridPane gridPane;
-    static final int CELL_SIZE = 50;
+    static final int CELL_SIZE = 55;
     private final Pokemon myPokemon;
     private final Pokemon bossPokemon;
     private final Color MY_POKEMON_COLOR = Color.YELLOW;
-    private final Color BOSS_POKEMON_COLOR = Color.RED;
+    private final Color BOSS_POKEMON_COLOR = Color.ORANGE;
 
     public MapView(int width, int height, RectangularMap map){
         this.height = height;
@@ -83,6 +83,8 @@ public class MapView {
                     if(Objects.equals(object, map.getBossPokemon())){
                         elementContainer.setBackground(getBackgroundOfColor(BOSS_POKEMON_COLOR));
                     }
+
+                    elementContainer.setPrefSize(CELL_SIZE, CELL_SIZE);
 
                     gridPane.add(elementContainer, position.x, height - position.y - 1);
                     GridPane.setHalignment(elementContainer, HPos.CENTER);

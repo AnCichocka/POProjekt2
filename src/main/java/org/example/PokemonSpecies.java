@@ -17,7 +17,7 @@ public enum PokemonSpecies {
 
     @Override
     public String toString(){
-        String message = switch(this){
+        String name = switch(this){
             case PIPLUP -> "PIPLUP";
             case MAGIKARP -> "MAGIKARP";
             case OMANYTE -> "OMANYTE";
@@ -29,7 +29,7 @@ public enum PokemonSpecies {
             case CARKOL -> "CARKOL";
         };
 
-        return message;
+        return name;
     }
 
     public PokemonType getPokemonSpeciesType(){
@@ -46,15 +46,15 @@ public enum PokemonSpecies {
     public String getImagePath(){
 
         String path = switch(this){
-            case PIPLUP -> "src/main/resources/piplup.png";
+            case PIPLUP -> "src/main/resources/piplup1.png";
             case MAGIKARP -> "src/main/resources/magikarp.png";
-            case OMANYTE -> "src/main/resources/omanyte.png";
+            case OMANYTE -> "src/main/resources/omanyte1.png";
             case BULBASAUR -> "src/main/resources/bulbasaur.png";
             case CACNEA -> "src/main/resources/cacnea.png";
             case SEWADDLE -> "src/main/resources/sewaddle.png";
             case SLUGMA -> "src/main/resources/slugma.png";
             case TORKOAL -> "src/main/resources/torkoal.png";
-            case CARKOL -> "src/main/resources/carkol.png";
+            case CARKOL -> "src/main/resources/carkol1.png";
         };
 
         return path;
@@ -66,7 +66,7 @@ public enum PokemonSpecies {
 
             case PIPLUP -> new PokemonAttack[]{PokemonAttack.POOR_NEUTRAL, PokemonAttack.PUSH_SOME_WATER, PokemonAttack.WATERFALL};
             case MAGIKARP -> new PokemonAttack[]{PokemonAttack.CRY, PokemonAttack.PUSH_SOME_WATER, PokemonAttack.WATERFALL};
-            case OMANYTE -> new PokemonAttack[]{PokemonAttack.POOR_NEUTRAL, PokemonAttack.CRY, PokemonAttack.POOR_NEUTRAL};
+            case OMANYTE -> new PokemonAttack[]{PokemonAttack.POOR_NEUTRAL, PokemonAttack.CRY, PokemonAttack.PUSH_SOME_WATER};
             case BULBASAUR -> new PokemonAttack[]{PokemonAttack.LEAF_SLAP, PokemonAttack.POWERFULL_NEUTRAL, PokemonAttack.GRASS_CUT};
             case CACNEA -> new PokemonAttack[]{PokemonAttack.PREATTY_NEUTRAL, PokemonAttack.POWERFULL_NEUTRAL, PokemonAttack.PULL_OUT_WEED};
             case SEWADDLE -> new PokemonAttack[]{PokemonAttack.LEAF_SLAP, PokemonAttack.PREATTY_NEUTRAL, PokemonAttack.PULL_OUT_WEED};

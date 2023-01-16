@@ -21,8 +21,8 @@ public class App extends Application implements IFightObserver {
         try{
             int numberOfWildPokemons = 4;
             int numberOfObstacles = 10;
-            int width = 10;
-            int height = 10;
+            int width = 25;
+            int height = 14;
             RectangularMap map = new RectangularMap(width,height, numberOfWildPokemons, numberOfObstacles);
             this.map = map;
 
