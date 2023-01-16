@@ -1,24 +1,36 @@
 package org.example;
 
 public enum PokemonAttack {
+    LEAF_SLAP,
+    GRASS_CUT,
     PULL_OUT_WEED,
+    CRY,
     PUSH_SOME_WATER,
     WATERFALL,
     POOR_NEUTRAL,
     PREATTY_NEUTRAL,
-    POWERFULL_NEUTRAL;
+    POWERFULL_NEUTRAL,
+    SPARK,
+    THROW_CANDLES,
+    FIREBALL;
 
 
     @Override
     public String toString(){
 
         String message = switch(this){
+            case LEAF_SLAP -> "leaf slap";
+            case GRASS_CUT -> "grass cut";
             case PULL_OUT_WEED -> "pull out weed";
+            case CRY -> "cry";
             case PUSH_SOME_WATER -> "push some water";
             case WATERFALL -> "waterfall";
             case POOR_NEUTRAL -> "poor neutral";
             case PREATTY_NEUTRAL -> "preatty neutal";
             case POWERFULL_NEUTRAL -> "powerful neutral";
+            case SPARK -> "spark";
+            case THROW_CANDLES -> "throw candles";
+            case FIREBALL -> "fireball";
         };
 
         return message;
@@ -27,9 +39,10 @@ public enum PokemonAttack {
     public PokemonAttackType getAttackType(){
 
         PokemonAttackType attackType = switch(this){
-            case PULL_OUT_WEED -> PokemonAttackType.GRASS;
-            case PUSH_SOME_WATER, WATERFALL -> PokemonAttackType.WATER;
+            case PULL_OUT_WEED, GRASS_CUT, LEAF_SLAP -> PokemonAttackType.GRASS;
+            case PUSH_SOME_WATER, WATERFALL, CRY -> PokemonAttackType.WATER;
             case POOR_NEUTRAL, PREATTY_NEUTRAL, POWERFULL_NEUTRAL -> PokemonAttackType.NEUTRAL;
+            case SPARK, FIREBALL, THROW_CANDLES -> PokemonAttackType.FIRE;
         };
 
         return attackType;
@@ -38,12 +51,14 @@ public enum PokemonAttack {
     private int getRawDamagePoints(){
 
         int damagePoints = switch(this){
-            case PULL_OUT_WEED -> 20;
-            case PUSH_SOME_WATER -> 10;
-            case WATERFALL -> 25;
-            case POOR_NEUTRAL -> 5;
-            case PREATTY_NEUTRAL -> 10;
-            case POWERFULL_NEUTRAL -> 20;
+
+            case LEAF_SLAP, PUSH_SOME_WATER, POOR_NEUTRAL -> 5;
+            case GRASS_CUT -> 15;
+            case PULL_OUT_WEED, POWERFULL_NEUTRAL -> 25;
+            case CRY -> 2;
+            case WATERFALL, FIREBALL -> 30;
+            case PREATTY_NEUTRAL, SPARK -> 10;
+            case THROW_CANDLES -> 20;
         };
 
         return damagePoints;

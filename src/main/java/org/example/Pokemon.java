@@ -5,9 +5,11 @@ import java.util.Random;
 
 public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObserver {
 
-    int lifePoints;
-    int maxLifePoints;
-    PokemonSpecies species;
+    private int lifePoints;
+    private int maxLifePoints;
+    private PokemonSpecies species;
+    private static final double CONST_PERCENTAGE = 0.2;
+    private static final int BASE_LIFE = 100;
 
     public PokemonAttack getAttackOfIndex(int index) {
         return this.attacks[index];
@@ -30,7 +32,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         this(position, map, 1);
     }
 
-    public int getLifePoints() {
+    public int getLifePoints(){
         return lifePoints;
     }
 
@@ -41,8 +43,8 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         this.level = level;
         this.observersFight = new ArrayList<>();
         this.observersMove = new ArrayList<>();
-        this.lifePoints = 100;
-        this.maxLifePoints = 100;
+        this.maxLifePoints = (int)Math.round(BASE_LIFE*(1 + CONST_PERCENTAGE * (this.level -1)));
+        this.lifePoints = maxLifePoints;
         this.species = PokemonSpecies.randomPokemonSpecies();
         this.attacks = this.species.getPokemonAttacks();
 
@@ -144,6 +146,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         System.out.println("before: " + pokemon.lifePoints);
         PokemonAttack attack = attacks[attackIndex];
         int damagePoints = attack.getDamageToType(pokemon.getSpecies().getPokemonSpeciesType());
+        damagePoints = (int)Math.round(damagePoints*(1 + CONST_PERCENTAGE * (this.level - 1)));
         pokemon.setLifePoints(pokemon, pokemon.getLifePoints() - damagePoints);
         System.out.println("after: " + pokemon.lifePoints);
     }
@@ -163,6 +166,14 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
     }
 
     public void regenerate(){
-        this.lifePoints = this.maxLifePoints;
+        this.lifePoints = (int)Math.round(BASE_LIFE*(1 + CONST_PERCENTAGE * (this.level - 1)));
+    }
+    public void lostFight(){
+        if(this.level > 1){
+            this.level -= 1;
+        }
+    }
+    public void wonFight(){
+        this.level += 1;
     }
 }

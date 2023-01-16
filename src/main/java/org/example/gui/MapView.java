@@ -3,6 +3,7 @@ package org.example.gui;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -33,6 +34,7 @@ public class MapView {
     }
     public Scene getMapScene(){
         this.gridPane = new GridPane();
+        this.gridPane.setAlignment(Pos.CENTER);
 
         System.out.println(map);
 
@@ -78,7 +80,7 @@ public class MapView {
                         elementContainer.setBackground(getBackgroundOfColor(MY_POKEMON_COLOR));
                     }
 
-                    if(Objects.equals(object, bossPokemon)){
+                    if(Objects.equals(object, map.getBossPokemon())){
                         elementContainer.setBackground(getBackgroundOfColor(BOSS_POKEMON_COLOR));
                     }
 

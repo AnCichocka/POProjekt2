@@ -32,8 +32,8 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
         this.obstacles = new HashMap<>();
         this.pokemons = new HashMap<>();
         this.freePositions = createFreePositions();
-        this.myPokemon = createMyPokemonOnMap();
-        this.bossPokemon = createBossOnMap();
+        this.myPokemon = putNewMyPokemonOnMap();
+        putNewBossOnMap();
 
         createPokemonsOnMap(numberOfPokemons);
         createObstaclesOnMap(numberOfRocks);
@@ -53,15 +53,17 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
 
         return freePositions;
     }
-    public Pokemon createMyPokemonOnMap(){
+    public Pokemon putNewMyPokemonOnMap(){
         Vector2d position = getRandomFreePosition();
-        Pokemon pokemon = new Pokemon(position, this, 0);
+        Pokemon pokemon = new Pokemon(position, this, 10);
         this.place(pokemon);
         return pokemon;
     }
-    public Pokemon createBossOnMap(){
+    public Pokemon putNewBossOnMap(){
+
         Vector2d position = getRandomFreePosition();
-        Pokemon pokemon = new Pokemon(position, this, 9);
+        Pokemon pokemon = new Pokemon(position, this, 10);
+        this.bossPokemon = pokemon;
         this.place(pokemon);
         return pokemon;
     }
@@ -99,18 +101,22 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
     }
     //only when there is an obstacle
     public boolean place(Pokemon pokemon){
-        if (this.canMoveTo(pokemon.getPosition())){
-//            System.out.println(pokemon.getPosition());
+        if (this.canPlaceOnPosition(pokemon.getPosition())){
             pokemons.put(pokemon.getPosition(), pokemon);
-//            System.out.println("PLACED");
             return true;
         }
         else {
             throw new IllegalArgumentException(pokemon.getPosition() + " is invalid position");
         }
     }
-    public void placeObstacle(Obstacle obstacle){
-        obstacles.put(obstacle.getPosition(), obstacle);
+    public boolean placeObstacle(Obstacle obstacle){
+        if (this.canPlaceOnPosition(obstacle.getPosition())){
+            obstacles.put(obstacle.getPosition(), obstacle);
+            return true;
+        }
+        else {
+            throw new IllegalArgumentException(obstacle.getPosition() + " is invalid position");
+        }
     }
     boolean isBlocked(Vector2d position){
         return obstacles.get(position) != null;
@@ -123,6 +129,9 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
     }
     public boolean canMoveTo(Vector2d position) {
         return position.follows(this.lowerLeft) && position.precedes(this.upperRight) && !this.isBlocked(position);
+    }
+    public boolean canPlaceOnPosition(Vector2d position){
+        return position.follows(this.lowerLeft) && position.precedes(this.upperRight) && objectAt(position) == null;
     }
     public boolean willBeFight(Vector2d position){
         return pokemons.get(position) != null;
@@ -162,6 +171,9 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
 
     @Override
     public void fightEnded(Pokemon deadPokemon) {
+        if(Objects.equals(bossPokemon, deadPokemon)){
+            putNewBossOnMap();
+        }
         if(!Objects.equals(myPokemon, deadPokemon)){
             pokemons.remove(deadPokemon.getPosition());
         }

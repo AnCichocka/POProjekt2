@@ -19,8 +19,8 @@ public class App extends Application implements IFightObserver {
         super.init();
 
         try{
-            int numberOfPokemons = 1;
-            int numberOfRocks = 5;
+            int numberOfPokemons = 15;
+            int numberOfRocks = 20;
             int width = 25;
             int height = 15;
             RectangularMap map = new RectangularMap(width,height, numberOfPokemons, numberOfRocks);
@@ -30,6 +30,9 @@ public class App extends Application implements IFightObserver {
 
             fightView.addFightObserver(this);
             fightView.addFightObserver(this.map);
+
+            WinView winView = new WinView(map.getBossPokemon());
+            fightView.addFightObserver(winView);
 
             this.mapView = new MapView(width, height, map);
 

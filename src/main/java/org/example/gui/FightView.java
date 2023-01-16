@@ -145,6 +145,8 @@ public class FightView implements IFightObserver {
                 this.fightSceneContainer.getChildren().clear();
                 refreshToEndFightView();
 
+                myPokemon.wonFight();
+
                 myPokemon.regenerate();
                 wildPokemon.regenerate();
 
@@ -162,6 +164,8 @@ public class FightView implements IFightObserver {
                     this.titleText = "YOU LOSE THIS FIGHT";
                     this.fightSceneContainer.getChildren().clear();
                     refreshToEndFightView();
+
+                    myPokemon.lostFight();
 
                     myPokemon.regenerate();
                     wildPokemon.regenerate();
@@ -185,8 +189,12 @@ public class FightView implements IFightObserver {
         this.myPokemon = myPokemon;
         this.wildPokemon = wildPokemon;
 
+        System.out.println(myPokemon.getLevel());
+
         this.myPokemonLife = myPokemon.getLifePoints();
         this.wildPokemonLife = wildPokemon.getLifePoints();
+
+        System.out.println(myPokemon.getLifePoints());
 
         getFightScene();
     }
