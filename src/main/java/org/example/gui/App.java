@@ -7,7 +7,7 @@ import org.example.*;
 
 public class App extends Application implements IFightStartObserver, IFightEndObserver {
 
-    private RectangularMap map;
+    private Map map;
     private MapView mapView;
     private Pokemon myPokemon;
     private boolean fightInProgress;
@@ -23,7 +23,7 @@ public class App extends Application implements IFightStartObserver, IFightEndOb
             int numberOfObstacles = 10;
             int width = 25;
             int height = 14;
-            RectangularMap map = new RectangularMap(width,height, numberOfWildPokemons, numberOfObstacles);
+            Map map = new Map(width,height, numberOfWildPokemons, numberOfObstacles);
             this.map = map;
 
             FightView fightView = new FightView();

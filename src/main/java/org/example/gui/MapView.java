@@ -9,7 +9,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.example.IMapElement;
 import org.example.Pokemon;
-import org.example.RectangularMap;
+import org.example.Map;
 import org.example.Vector2d;
 
 import java.util.Objects;
@@ -17,20 +17,18 @@ import java.util.Objects;
 public class MapView {
     private final int height;
     private final int width;
-    private final RectangularMap map;
+    private final Map map;
     private GridPane gridPane;
     static final int CELL_SIZE = 55;
     private final Pokemon myPokemon;
-    private final Pokemon bossPokemon;
     private final Color MY_POKEMON_COLOR = Color.YELLOW;
     private final Color BOSS_POKEMON_COLOR = Color.ORANGE;
 
-    public MapView(int width, int height, RectangularMap map){
+    public MapView(int width, int height, Map map){
         this.height = height;
         this.width = width;
         this.map = map;
         this.myPokemon = map.getMyPokemon();
-        this.bossPokemon = map.getBossPokemon();
     }
     public Scene getMapScene(){
         this.gridPane = new GridPane();

@@ -14,7 +14,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightStar
     private Vector2d position;
     private final ArrayList<IPositionChangeObserver> observersMove;
     private final ArrayList<IFightStartObserver> observersFight;
-    private final RectangularMap map;
+    private final Map map;
 
     public PokemonAttack getAttackOfIndex(int index) {
         return this.attacks[index];
@@ -28,7 +28,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightStar
     public int getLeftLifePoints(){
         return leftLifePoints;
     }
-    public Pokemon(Vector2d position, RectangularMap map, int level){
+    public Pokemon(Vector2d position, Map map, int level){
 
         this.position = position;
         this.map = map;

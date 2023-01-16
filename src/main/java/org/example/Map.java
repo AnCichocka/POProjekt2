@@ -2,15 +2,15 @@ package org.example;
 
 import java.util.*;
 
-public class RectangularMap implements IPositionChangeObserver, IFightEndObserver{
+public class Map implements IPositionChangeObserver, IFightEndObserver{
 
     private final Vector2d lowerLeft;
     private final Vector2d upperRight;
     private final int width;
     private final int height;
     private final MapVisualizer visualizer;
-    private final Map<Vector2d, Pokemon> pokemons;
-    private final Map<Vector2d, Obstacle> obstacles;
+    private final java.util.Map<Vector2d, Pokemon> pokemons;
+    private final java.util.Map<Vector2d, Obstacle> obstacles;
     private final ArrayList<Vector2d> freePositions;
     private Pokemon bossPokemon;
     private final Pokemon myPokemon;
@@ -22,7 +22,7 @@ public class RectangularMap implements IPositionChangeObserver, IFightEndObserve
         return bossPokemon;
     }
 
-    public RectangularMap(int width, int height, int numberOfPokemons, int numberOfObstacles){
+    public Map(int width, int height, int numberOfPokemons, int numberOfObstacles){
 
         this.width = width;
         this.height = height;

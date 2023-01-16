@@ -12,9 +12,7 @@ import org.example.Pokemon;
 import java.util.Objects;
 
 public class WinView implements IFightEndObserver {
-    //wyświetla widok zwycięztwa
     private final Pokemon firstBoss;
-
     private final static int WIN_SCENE_WIDTH = 500;
     private final static int WIN_SCENE_HEIGHT = 300;
     private static final int TITLE_FONT_SIZE = 30;

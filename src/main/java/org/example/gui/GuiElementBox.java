@@ -20,16 +20,7 @@ public class GuiElementBox {
 
     public GuiElementBox(IMapElement element){
         try{
-            String path;
-            int level = -1;
-
-            if(element instanceof Pokemon){
-                path = ((Pokemon) element).getImagePath();
-                level = ((Pokemon)element).getLevel();
-            }
-            else{
-                path = ((Obstacle) element).getImagePath();
-            }
+            String path = element.getImagePath();
 
             Image image = new Image(new FileInputStream(path));
             imageView = new ImageView(image);
@@ -39,6 +30,11 @@ public class GuiElementBox {
             this.elementContainer = new VBox(imageView);
             this.elementContainer.setAlignment(Pos.CENTER);
 
+            int level = -1;
+
+            if(element instanceof Pokemon){
+                level = ((Pokemon)element).getLevel();
+            }
             if(level != -1){
                 Label levelLabel = new Label("lvl. " + level);
                 this.elementContainer.getChildren().add(levelLabel);
