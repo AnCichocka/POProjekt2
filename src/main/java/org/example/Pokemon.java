@@ -27,15 +27,9 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
     public Vector2d getPosition() {
         return position;
     }
-
-    public Pokemon(Vector2d position, RectangularMap map){
-        this(position, map, 1);
-    }
-
     public int getLifePoints(){
         return lifePoints;
     }
-
     public Pokemon(Vector2d position, RectangularMap map, int level){
 
         this.position = position;

@@ -13,6 +13,7 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
     private final Map<Vector2d, Obstacle> obstacles;
     private final ArrayList<Vector2d> freePositions;
     private Pokemon bossPokemon;
+    private final Pokemon myPokemon;
 
     public Pokemon getMyPokemon() {
         return myPokemon;
@@ -20,8 +21,6 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
     public Pokemon getBossPokemon() {
         return bossPokemon;
     }
-
-    private final Pokemon myPokemon;
 
     public RectangularMap(int width, int height, int numberOfPokemons, int numberOfRocks){
 
@@ -40,7 +39,6 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
 
         this.visualizer = new MapVisualizer(this);
     }
-
     public ArrayList<Vector2d> createFreePositions() {
 
         ArrayList<Vector2d> freePositions = new ArrayList<>();
@@ -55,15 +53,22 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
     }
     public Pokemon putNewMyPokemonOnMap(){
         Vector2d position = getRandomFreePosition();
-        Pokemon pokemon = new Pokemon(position, this, 10);
+        Pokemon pokemon = new Pokemon(position, this, 1);
         this.place(pokemon);
         return pokemon;
     }
     public Pokemon putNewBossOnMap(){
 
         Vector2d position = getRandomFreePosition();
-        Pokemon pokemon = new Pokemon(position, this, 10);
+        Pokemon pokemon = new Pokemon(position, this, Math.max(10, getMyPokemon().level*2));
         this.bossPokemon = pokemon;
+        this.place(pokemon);
+        return pokemon;
+    }
+    public Pokemon putNewWildPokemonOnMap(){
+        Vector2d position = getRandomFreePosition();
+        int level = getNewPokemonOnMapLevel();
+        Pokemon pokemon = new Pokemon(position, this, level);
         this.place(pokemon);
         return pokemon;
     }
@@ -71,9 +76,15 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
 
         for(int i=0; i<n; i++){
             Vector2d position = getRandomFreePosition();
-            Pokemon pokemon = new Pokemon(position, this);
+            int level = getNewPokemonOnMapLevel();
+            Pokemon pokemon = new Pokemon(position, this, level);
             this.place(pokemon);
         }
+    }
+    private int getNewPokemonOnMapLevel(){
+        Random random = new Random();
+        int level = random.nextInt(1, getMyPokemon().level + 2 + 1);
+        return level;
     }
     public void createObstaclesOnMap(int n){
 
@@ -176,6 +187,7 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
         }
         if(!Objects.equals(myPokemon, deadPokemon)){
             pokemons.remove(deadPokemon.getPosition());
+            putNewWildPokemonOnMap();
         }
         //TODO: add new pokemon on random place
         //TODO: check if boss -> new boss

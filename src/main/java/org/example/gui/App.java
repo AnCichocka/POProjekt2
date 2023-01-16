@@ -19,11 +19,11 @@ public class App extends Application implements IFightObserver {
         super.init();
 
         try{
-            int numberOfPokemons = 15;
-            int numberOfRocks = 20;
-            int width = 25;
-            int height = 15;
-            RectangularMap map = new RectangularMap(width,height, numberOfPokemons, numberOfRocks);
+            int numberOfWildPokemons = 4;
+            int numberOfObstacles = 10;
+            int width = 10;
+            int height = 10;
+            RectangularMap map = new RectangularMap(width,height, numberOfWildPokemons, numberOfObstacles);
             this.map = map;
 
             FightView fightView = new FightView();
