@@ -10,17 +10,6 @@ public class Main {
 
         Application.launch(App.class, args);
 
-//        PokemonAttack attack = PokemonAttack.PULL_OUT_WEED;
-//        PokemonType pokemonFire = PokemonType.WATER;
-//
-//        attack.getDamageToType(pokemonFire);
-
-//        Pokemon pokemon = new Pokemon(PokemonSpecies.randomPokemonSpecies());
-//
-//        for(PokemonAttack attack : pokemon.getSpecies().getPokemonAttacks()){
-//            System.out.println("attack: " + attack);
-//        }
-
     }
 }
 

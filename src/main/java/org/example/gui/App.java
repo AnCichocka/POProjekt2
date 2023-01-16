@@ -19,7 +19,7 @@ public class App extends Application implements IFightObserver {
         super.init();
 
         try{
-            int numberOfWildPokemons = 4;
+            int numberOfWildPokemons = 10;
             int numberOfObstacles = 10;
             int width = 25;
             int height = 14;
@@ -78,13 +78,6 @@ public class App extends Application implements IFightObserver {
                 }
             }
         });
-
-//        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent event) {
-//                System.out.println("release");
-//            }
-//        });
 
         primaryStage.setScene(scene);
         primaryStage.show();

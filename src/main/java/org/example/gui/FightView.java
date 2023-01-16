@@ -156,7 +156,7 @@ public class FightView implements IFightObserver {
         button.setOnAction(event -> {
             //System.out.println(attackIndex + "clicked");
             myPokemon.attack(wildPokemon, attackIndex);
-            this.wildPokemonLife = wildPokemon.getLifePoints();
+            this.wildPokemonLife = wildPokemon.getLeftLifePoints();
 
             //you win
             if(wildPokemon.isDead()){
@@ -166,8 +166,8 @@ public class FightView implements IFightObserver {
 
                 myPokemon.wonFight();
 
-                myPokemon.regenerate();
-                wildPokemon.regenerate();
+                myPokemon.regenerateAfterFight();
+                wildPokemon.regenerateAfterFight();
 
                 fightEnded(wildPokemon);
             }
@@ -176,7 +176,7 @@ public class FightView implements IFightObserver {
                 Random random = new Random();
                 int randomIndex = random.nextInt(0,3);
                 wildPokemon.attack(myPokemon, randomIndex);
-                this.myPokemonLife = myPokemon.getLifePoints();
+                this.myPokemonLife = myPokemon.getLeftLifePoints();
 
                 //you loose
                 if(myPokemon.isDead()){
@@ -186,8 +186,8 @@ public class FightView implements IFightObserver {
 
                     myPokemon.lostFight();
 
-                    myPokemon.regenerate();
-                    wildPokemon.regenerate();
+                    myPokemon.regenerateAfterFight();
+                    wildPokemon.regenerateAfterFight();
 
                     fightEnded(myPokemon);
                 }
@@ -210,10 +210,10 @@ public class FightView implements IFightObserver {
 
         System.out.println(myPokemon.getLevel());
 
-        this.myPokemonLife = myPokemon.getLifePoints();
-        this.wildPokemonLife = wildPokemon.getLifePoints();
+        this.myPokemonLife = myPokemon.getLeftLifePoints();
+        this.wildPokemonLife = wildPokemon.getLeftLifePoints();
 
-        System.out.println(myPokemon.getLifePoints());
+        System.out.println(myPokemon.getLeftLifePoints());
 
         getFightScene();
     }

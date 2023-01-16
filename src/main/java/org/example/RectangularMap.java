@@ -22,7 +22,7 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
         return bossPokemon;
     }
 
-    public RectangularMap(int width, int height, int numberOfPokemons, int numberOfRocks){
+    public RectangularMap(int width, int height, int numberOfPokemons, int numberOfObstacles){
 
         this.width = width;
         this.height = height;
@@ -31,15 +31,15 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
         this.obstacles = new HashMap<>();
         this.pokemons = new HashMap<>();
         this.freePositions = createFreePositions();
-        this.myPokemon = putNewMyPokemonOnMap();
-        putNewBossOnMap();
+        this.myPokemon = putNewPokemonOnMap(1);
+        this.bossPokemon = putNewBossOnMap();
 
-        createPokemonsOnMap(numberOfPokemons);
-        createObstaclesOnMap(numberOfRocks);
+        addWildPokemons(numberOfPokemons);
+        createObstaclesOnMap(numberOfObstacles);
 
         this.visualizer = new MapVisualizer(this);
     }
-    public ArrayList<Vector2d> createFreePositions() {
+    private ArrayList<Vector2d> createFreePositions() {
 
         ArrayList<Vector2d> freePositions = new ArrayList<>();
 
@@ -51,50 +51,42 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
 
         return freePositions;
     }
-    public Pokemon putNewMyPokemonOnMap(){
-        Vector2d position = getRandomFreePosition();
-        Pokemon pokemon = new Pokemon(position, this, 1);
-        this.place(pokemon);
-        return pokemon;
-    }
-    public Pokemon putNewBossOnMap(){
+    private void addWildPokemons(int n){
 
-        Vector2d position = getRandomFreePosition();
-        Pokemon pokemon = new Pokemon(position, this, Math.max(10, getMyPokemon().level*2));
-        this.bossPokemon = pokemon;
-        this.place(pokemon);
-        return pokemon;
+        for(int i=0; i<n; i++){
+            putNewWildPokemonOnMap();
+        }
     }
-    public Pokemon putNewWildPokemonOnMap(){
+    private void putNewWildPokemonOnMap(){
+
+        int level = getNewWildPokemonOnMapLevel();
+        putNewPokemonOnMap(level);
+    }
+    private Pokemon putNewPokemonOnMap(int level){
         Vector2d position = getRandomFreePosition();
-        int level = getNewPokemonOnMapLevel();
         Pokemon pokemon = new Pokemon(position, this, level);
         this.place(pokemon);
         return pokemon;
     }
-    public void createPokemonsOnMap(int n){
+    private int getNewWildPokemonOnMapLevel(){
 
-        for(int i=0; i<n; i++){
-            Vector2d position = getRandomFreePosition();
-            int level = getNewPokemonOnMapLevel();
-            Pokemon pokemon = new Pokemon(position, this, level);
-            this.place(pokemon);
-        }
-    }
-    private int getNewPokemonOnMapLevel(){
         Random random = new Random();
-        int level = random.nextInt(1, getMyPokemon().level + 2 + 1);
-        return level;
+        return random.nextInt(1, getMyPokemon().getLevel() + 2 + 1);
     }
-    public void createObstaclesOnMap(int n){
+    private Pokemon putNewBossOnMap(){
+
+        int level = Math.max(10, getMyPokemon().getLevel()*2);
+        return putNewPokemonOnMap(level);
+    }
+    private void createObstaclesOnMap(int n){
 
         for(int i=0; i<n; i++){
             Vector2d position = getRandomFreePosition();
             Obstacle obstacle = new Obstacle(position);
-            this.placeObstacle(obstacle);
+            this.place(obstacle);
         }
     }
-    public Vector2d getRandomFreePosition(){
+    private Vector2d getRandomFreePosition(){
 
         Random random = new Random();
 
@@ -104,33 +96,28 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
 
         return position;
     }
-    public Vector2d getLowerLeftBound(){
+    private void place(IMapElement element){
+
+        Vector2d position = element.getPosition();
+
+        if (this.canPlaceOnPosition(element.getPosition())){
+
+            if(element instanceof Pokemon){
+                pokemons.put(position, (Pokemon) element);
+            }
+            else{
+                obstacles.put(position, (Obstacle) element);
+            }
+        }
+        else {
+            throw new IllegalArgumentException(position + " is invalid position");
+        }
+    }
+    private Vector2d getLowerLeftBound(){
         return this.lowerLeft;
     }
-    public Vector2d getUpperRightBound(){
+    private Vector2d getUpperRightBound(){
         return this.upperRight;
-    }
-    //only when there is an obstacle
-    public boolean place(Pokemon pokemon){
-        if (this.canPlaceOnPosition(pokemon.getPosition())){
-            pokemons.put(pokemon.getPosition(), pokemon);
-            return true;
-        }
-        else {
-            throw new IllegalArgumentException(pokemon.getPosition() + " is invalid position");
-        }
-    }
-    public boolean placeObstacle(Obstacle obstacle){
-        if (this.canPlaceOnPosition(obstacle.getPosition())){
-            obstacles.put(obstacle.getPosition(), obstacle);
-            return true;
-        }
-        else {
-            throw new IllegalArgumentException(obstacle.getPosition() + " is invalid position");
-        }
-    }
-    boolean isBlocked(Vector2d position){
-        return obstacles.get(position) != null;
     }
     public Object objectAt(Vector2d position){
         if(this.pokemons.get(position) == null){
@@ -139,27 +126,26 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
         return this.pokemons.get(position);
     }
     public boolean canMoveTo(Vector2d position) {
-        return position.follows(this.lowerLeft) && position.precedes(this.upperRight) && !this.isBlocked(position);
+        return isPositionInMapBoundaries(position) && !(objectAt(position) instanceof Obstacle);
     }
     public boolean canPlaceOnPosition(Vector2d position){
-        return position.follows(this.lowerLeft) && position.precedes(this.upperRight) && objectAt(position) == null;
+        return isPositionInMapBoundaries(position) && objectAt(position) == null;
     }
-    public boolean willBeFight(Vector2d position){
+    private boolean isPositionInMapBoundaries(Vector2d position){
+        return position.follows(this.lowerLeft) && position.precedes(this.upperRight);
+    }
+    public boolean willBeFightAtPosition(Vector2d position){
         return pokemons.get(position) != null;
     }
-    @Override
-    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
-        Pokemon pokemon = pokemons.remove(oldPosition);
-        pokemons.put(newPosition, pokemon);
+
+    //printing map in console//////////////////////////////////////
+    public boolean isOccupied(Vector2d position){
+        return pokemons.get(position) != null || obstacles.get(position) != null;
     }
     @Override
     public String toString(){
-        System.out.println(pokemons);
+        //System.out.println(pokemons);
         return this.visualizer.draw(getLowerLeftBound(), getUpperRightBound());
-        }
-        //służy do drukowania mapy w konsoli
-    public boolean isOccupied(Vector2d position){
-        return pokemons.get(position) != null || obstacles.get(position) != null;
     }
     public void moveWildPokemons(){
 
@@ -174,7 +160,11 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
             }
         }
     }
-
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+        Pokemon pokemon = pokemons.remove(oldPosition);
+        pokemons.put(newPosition, pokemon);
+    }
     @Override
     public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
 
@@ -183,13 +173,11 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
     @Override
     public void fightEnded(Pokemon deadPokemon) {
         if(Objects.equals(bossPokemon, deadPokemon)){
-            putNewBossOnMap();
+            this.bossPokemon = putNewBossOnMap();
         }
         if(!Objects.equals(myPokemon, deadPokemon)){
             pokemons.remove(deadPokemon.getPosition());
             putNewWildPokemonOnMap();
         }
-        //TODO: add new pokemon on random place
-        //TODO: check if boss -> new boss
     }
 }
