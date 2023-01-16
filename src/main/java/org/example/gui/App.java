@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.*;
 
-public class App extends Application implements IFightObserver {
+public class App extends Application implements IFightStartObserver, IFightEndObserver {
 
     private RectangularMap map;
     private MapView mapView;
@@ -28,17 +28,18 @@ public class App extends Application implements IFightObserver {
 
             FightView fightView = new FightView();
 
-            fightView.addFightObserver(this);
-            fightView.addFightObserver(this.map);
+            fightView.addFightEndObserver(this.map);
+            fightView.addFightEndObserver(this);
+            fightView.addFightStartObserver(this);
 
             WinView winView = new WinView(map.getBossPokemon());
-            fightView.addFightObserver(winView);
+            fightView.addFightEndObserver(winView);
 
             this.mapView = new MapView(width, height, map);
 
             this.myPokemon = map.getMyPokemon();
-            this.myPokemon.addFightObserver(fightView);
-            this.myPokemon.addFightObserver(this);
+            this.myPokemon.addFightStartObserver(fightView);
+            this.myPokemon.addFightStartObserver(this);
 
 
             System.out.println(map);
@@ -85,13 +86,13 @@ public class App extends Application implements IFightObserver {
     }
 
     @Override
-    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
-        fightInProgress = true;
+    public void fightEnded1(Pokemon winner, Pokemon looser) {
+        fightInProgress = false;
+        this.mapView.refresh();
     }
 
     @Override
-    public void fightEnded(Pokemon deadPokemon){
-        fightInProgress = false;
-        this.mapView.refresh();
+    public void fightStart(Pokemon myPokemon, Pokemon wildPokemon) {
+        fightInProgress = true;
     }
 }

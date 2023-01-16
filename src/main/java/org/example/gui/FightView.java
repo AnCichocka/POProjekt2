@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
-public class FightView implements IFightObserver {
+public class FightView implements IFightEndObserver, IFightStartObserver {
 
     private Pokemon myPokemon;
     private Pokemon wildPokemon;
@@ -29,7 +29,8 @@ public class FightView implements IFightObserver {
     private VBox fightSceneContainer;
     private VBox middleContainer;
     private String titleText;
-    private final ArrayList<IFightObserver> observers = new ArrayList();
+    private final ArrayList<IFightStartObserver> fightStartObservers = new ArrayList();
+    private final ArrayList<IFightEndObserver> fightEndObservers = new ArrayList();
     static final int FIGHT_SCENE_WIDTH = 1200;
     static final int FIGHT_SCENE_HEIGHT = 700;
     static final int ATTACK_BUTTONS_SPACING = 20;
@@ -42,7 +43,7 @@ public class FightView implements IFightObserver {
     static final int POKEMON_LIFE_SIZE = 20;
     static final int POKEMON_CONTAINER_SPACING = 20;
     static final int TITLE_FONT_SIZE = 40;
-    static final int BUTTON_CONTIANER_WIDTH = 200;
+    static final int BUTTON_CONTAINER_WIDTH = 200;
     static final int BUTTON_HEIGHT = 30;
     public void getFightScene(){
 
@@ -51,13 +52,11 @@ public class FightView implements IFightObserver {
 
         createFightScene();
 
-        String currentDir = System.getProperty("user.dir");
-        System.out.println("Current dir using System:" + currentDir);
-
+        //set background
         BackgroundImage myBI = new BackgroundImage(new Image("background3.jpg",FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT,false,true),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
-//then you set to your node
+
         fightSceneContainer.setBackground(new Background(myBI));
 
         Scene scene = new Scene(this.fightSceneContainer,FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT);
@@ -137,7 +136,7 @@ public class FightView implements IFightObserver {
         Button button3 = getAttackButton(2);
 
         VBox attackButtonsContainer = new VBox(button1, button2, button3);
-        attackButtonsContainer.setPrefSize(BUTTON_CONTIANER_WIDTH, BUTTON_CONTIANER_WIDTH);
+        attackButtonsContainer.setPrefSize(BUTTON_CONTAINER_WIDTH, BUTTON_CONTAINER_WIDTH);
 
         attackButtonsContainer.setSpacing(ATTACK_BUTTONS_SPACING);
         attackButtonsContainer.setAlignment(Pos.CENTER);
@@ -150,7 +149,7 @@ public class FightView implements IFightObserver {
 
         button.setFont(new Font(ATTACK_BUTTON_FONT_SIZE));
         button.setPadding(new Insets(ATTACK_BUTTON_PADDING));
-        button.setPrefSize(BUTTON_CONTIANER_WIDTH, BUTTON_HEIGHT);
+        button.setPrefSize(BUTTON_CONTAINER_WIDTH, BUTTON_HEIGHT);
 
         //eventListeners
         button.setOnAction(event -> {
@@ -164,12 +163,7 @@ public class FightView implements IFightObserver {
                 this.fightSceneContainer.getChildren().clear();
                 refreshToEndFightView();
 
-                myPokemon.wonFight();
-
-                myPokemon.regenerateAfterFight();
-                wildPokemon.regenerateAfterFight();
-
-                fightEnded(wildPokemon);
+                fightEnded1(myPokemon, wildPokemon);
             }
             else{
 
@@ -184,12 +178,7 @@ public class FightView implements IFightObserver {
                     this.fightSceneContainer.getChildren().clear();
                     refreshToEndFightView();
 
-                    myPokemon.lostFight();
-
-                    myPokemon.regenerateAfterFight();
-                    wildPokemon.regenerateAfterFight();
-
-                    fightEnded(myPokemon);
+                    fightEnded1(wildPokemon, myPokemon);
                 }
 
                 //fight still in progress
@@ -201,10 +190,36 @@ public class FightView implements IFightObserver {
 
         return button;
     }
+    public void refresh() {
+
+        Platform.runLater( () -> {
+            this.fightSceneContainer.getChildren().clear();
+            createFightScene();
+        });
+    }
+    public void refreshToEndFightView() {
+
+        Platform.runLater( () -> {
+            this.fightSceneContainer.getChildren().clear();
+            createFightScene();
+            middleContainer.getChildren().clear();
+        });
+    }
+    public void addFightEndObserver(IFightEndObserver observer){
+        fightEndObservers.add(observer);
+    }
+    public void addFightStartObserver(IFightStartObserver observer){
+        fightStartObservers.add(observer);
+    }
+    @Override
+    public void fightEnded1(Pokemon winner, Pokemon looser) {
+        for(IFightEndObserver observer : fightEndObservers){
+            observer.fightEnded1(winner, looser);
+        }
+    }
 
     @Override
-    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
-
+    public void fightStart(Pokemon myPokemon, Pokemon wildPokemon) {
         this.myPokemon = myPokemon;
         this.wildPokemon = wildPokemon;
 
@@ -217,33 +232,6 @@ public class FightView implements IFightObserver {
 
         getFightScene();
     }
-    public void refresh() {
-
-        Platform.runLater( () -> {
-            this.fightSceneContainer.getChildren().clear();
-            createFightScene();
-        });
-    }
-
-    public void refreshToEndFightView() {
-
-        Platform.runLater( () -> {
-            this.fightSceneContainer.getChildren().clear();
-            createFightScene();
-            middleContainer.getChildren().clear();
-        });
-    }
-    public void addFightObserver(IFightObserver observer){
-        observers.add(observer);
-    }
-
-    @Override
-    public void fightEnded(Pokemon deadPokemon) {
-        for(IFightObserver observer : observers){
-            observer.fightEnded(deadPokemon);
-        }
-    }
-
 }
 
 

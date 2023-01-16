@@ -3,7 +3,7 @@ package org.example;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObserver {
+public class Pokemon implements IPositionChangeObserver, IMapElement, IFightStartObserver {
 
     private int leftLifePoints;
     private final PokemonSpecies species;
@@ -13,7 +13,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
     private int level;
     private Vector2d position;
     private final ArrayList<IPositionChangeObserver> observersMove;
-    private final ArrayList<IFightObserver> observersFight;
+    private final ArrayList<IFightStartObserver> observersFight;
     private final RectangularMap map;
 
     public PokemonAttack getAttackOfIndex(int index) {
@@ -55,7 +55,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         newPosition = newPosition.add(unitVector);
         if(map.canMoveTo(newPosition)){
             if(map.willBeFightAtPosition(newPosition)){
-                this.fightStarted(this, (Pokemon) map.objectAt(newPosition));
+                this.fightStart(this, (Pokemon) map.objectAt(newPosition));
 //                FightView fightView = new FightView();
 //                fightView.createFightScene();
                 //czy pokemony, które pokonaliśmy powinny znikać z mapy? - mogą
@@ -113,19 +113,15 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
             observer.positionChanged(oldPosition, newPosition);
         }
     }
-    public void addFightObserver(IFightObserver observer){
+    public void addFightStartObserver(IFightStartObserver observer){
         observersFight.add(observer);
     }
     @Override
-    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
+    public void fightStart(Pokemon myPokemon, Pokemon wildPokemon) {
         System.out.println("FIGHT START");
-        for(IFightObserver observer : observersFight){
-            observer.fightStarted(myPokemon, wildPokemon);
+        for(IFightStartObserver observer : observersFight){
+            observer.fightStart(myPokemon, wildPokemon);
         }
-    }
-    @Override
-    public void fightEnded(Pokemon deadPokemon) {
-        //TODO: deal with dead pokemon
     }
     public void attack(Pokemon pokemon, int attackIndex){
 
@@ -151,7 +147,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightObse
         return level;
     }
     public void regenerateAfterFight(){
-        this.leftLifePoints = getValueOfIncludingLevel(this.leftLifePoints);
+        this.leftLifePoints = getValueOfIncludingLevel(BASE_LIFE);
     }
     private int getValueOfIncludingLevel(int valueToIncrease){
         return (int)Math.round(valueToIncrease * (1 + CONST_PERCENTAGE * (this.level - 1)));

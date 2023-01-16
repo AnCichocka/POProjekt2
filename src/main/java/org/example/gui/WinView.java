@@ -6,12 +6,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.example.IFightObserver;
+import org.example.IFightEndObserver;
 import org.example.Pokemon;
 
 import java.util.Objects;
 
-public class WinView implements IFightObserver {
+public class WinView implements IFightEndObserver {
     //wyświetla widok zwycięztwa
     private final Pokemon firstBoss;
 
@@ -49,15 +49,9 @@ public class WinView implements IFightObserver {
         box.setAlignment(Pos.CENTER);
         return box;
     }
-
     @Override
-    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
-
-    }
-
-    @Override
-    public void fightEnded(Pokemon deadPokemon) {
-        if(Objects.equals(firstBoss, deadPokemon)){
+    public void fightEnded1(Pokemon winner, Pokemon looser) {
+        if(Objects.equals(firstBoss, looser)){
             getWinScene();
         }
     }

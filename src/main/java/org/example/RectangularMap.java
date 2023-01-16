@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.*;
 
-public class RectangularMap implements IPositionChangeObserver, IFightObserver{
+public class RectangularMap implements IPositionChangeObserver, IFightEndObserver{
 
     private final Vector2d lowerLeft;
     private final Vector2d upperRight;
@@ -137,8 +137,6 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
     public boolean willBeFightAtPosition(Vector2d position){
         return pokemons.get(position) != null;
     }
-
-    //printing map in console//////////////////////////////////////
     public boolean isOccupied(Vector2d position){
         return pokemons.get(position) != null || obstacles.get(position) != null;
     }
@@ -166,18 +164,31 @@ public class RectangularMap implements IPositionChangeObserver, IFightObserver{
         pokemons.put(newPosition, pokemon);
     }
     @Override
-    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
+    public void fightEnded1(Pokemon winner, Pokemon looser) {
 
-    }
+        System.out.println("MAP HEARD END-----------------------------------------------");
 
-    @Override
-    public void fightEnded(Pokemon deadPokemon) {
-        if(Objects.equals(bossPokemon, deadPokemon)){
-            this.bossPokemon = putNewBossOnMap();
+        winner.regenerateAfterFight();
+        looser.regenerateAfterFight();
+
+        System.out.println("WINNER: " + winner.getLeftLifePoints());
+        System.out.println("LOOSER: " + looser.getLeftLifePoints());
+        System.out.println();
+
+        if(Objects.equals(myPokemon, looser)){
+            this.myPokemon.lostFight();
         }
-        if(!Objects.equals(myPokemon, deadPokemon)){
-            pokemons.remove(deadPokemon.getPosition());
-            putNewWildPokemonOnMap();
+        else{
+
+            this.myPokemon.wonFight();
+
+            if(Objects.equals(bossPokemon, looser)){
+                this.bossPokemon = putNewBossOnMap();
+            }
+            else{
+                pokemons.remove(looser.getPosition());
+                putNewWildPokemonOnMap();
+            }
         }
     }
 }
