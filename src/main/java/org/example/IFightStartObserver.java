@@ -1,5 +1,5 @@
 package org.example;
 
 public interface IFightStartObserver {
-    void fightStart(Pokemon myPokemon, Pokemon wildPokemon);
+    void fightStarted(Pokemon myPokemon, Pokemon wildPokemon);
 }

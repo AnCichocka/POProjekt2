@@ -164,7 +164,7 @@ public class Map implements IPositionChangeObserver, IFightEndObserver{
         pokemons.put(newPosition, pokemon);
     }
     @Override
-    public void fightEnded1(Pokemon winner, Pokemon looser) {
+    public void fightEnded(Pokemon winner, Pokemon looser) {
 
         System.out.println("MAP HEARD END-----------------------------------------------");
 
@@ -181,12 +181,12 @@ public class Map implements IPositionChangeObserver, IFightEndObserver{
         else{
 
             this.myPokemon.wonFight();
+            pokemons.remove(looser.getPosition());
 
             if(Objects.equals(bossPokemon, looser)){
                 this.bossPokemon = putNewBossOnMap();
             }
             else{
-                pokemons.remove(looser.getPosition());
                 putNewWildPokemonOnMap();
             }
         }

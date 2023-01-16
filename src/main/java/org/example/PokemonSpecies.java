@@ -17,7 +17,8 @@ public enum PokemonSpecies {
 
     @Override
     public String toString(){
-        String name = switch(this){
+
+        return switch(this){
             case PIPLUP -> "PIPLUP";
             case MAGIKARP -> "MAGIKARP";
             case OMANYTE -> "OMANYTE";
@@ -28,24 +29,20 @@ public enum PokemonSpecies {
             case TORKOAL -> "TORKOAL";
             case CARKOL -> "CARKOL";
         };
-
-        return name;
     }
 
     public PokemonType getPokemonSpeciesType(){
 
-        PokemonType type = switch(this){
+        return switch(this){
             case PIPLUP, MAGIKARP, OMANYTE -> PokemonType.WATER;
             case BULBASAUR, CACNEA, SEWADDLE -> PokemonType.GRASS;
             case SLUGMA, TORKOAL, CARKOL -> PokemonType.FIRE;
         };
-
-        return type;
     }
 
     public String getImagePath(){
 
-        String path = switch(this){
+        return switch(this){
             case PIPLUP -> "src/main/resources/piplup1.png";
             case MAGIKARP -> "src/main/resources/magikarp.png";
             case OMANYTE -> "src/main/resources/omanyte1.png";
@@ -56,13 +53,11 @@ public enum PokemonSpecies {
             case TORKOAL -> "src/main/resources/torkoal.png";
             case CARKOL -> "src/main/resources/carkol1.png";
         };
-
-        return path;
     }
 
     public PokemonAttack[] getPokemonAttacks(){
 
-        PokemonAttack[] attacks = switch(this){
+        return switch(this){
 
             case PIPLUP -> new PokemonAttack[]{PokemonAttack.POOR_NEUTRAL, PokemonAttack.PUSH_SOME_WATER, PokemonAttack.WATERFALL};
             case MAGIKARP -> new PokemonAttack[]{PokemonAttack.CRY, PokemonAttack.PUSH_SOME_WATER, PokemonAttack.WATERFALL};
@@ -74,7 +69,6 @@ public enum PokemonSpecies {
             case TORKOAL -> new PokemonAttack[]{PokemonAttack.POOR_NEUTRAL, PokemonAttack.THROW_CANDLES, PokemonAttack.FIREBALL};
             case CARKOL -> new PokemonAttack[]{PokemonAttack.SPARK, PokemonAttack.THROW_CANDLES, PokemonAttack.FIREBALL};
         };
-        return attacks;
     }
 
 

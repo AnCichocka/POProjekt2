@@ -18,7 +18,7 @@ public enum PokemonAttack {
     @Override
     public String toString(){
 
-        String message = switch(this){
+        return switch(this){
             case LEAF_SLAP -> "leaf slap";
             case GRASS_CUT -> "grass cut";
             case PULL_OUT_WEED -> "pull out weed";
@@ -32,25 +32,21 @@ public enum PokemonAttack {
             case THROW_CANDLES -> "throw candles";
             case FIREBALL -> "fireball";
         };
-
-        return message;
     }
 
     public PokemonAttackType getAttackType(){
 
-        PokemonAttackType attackType = switch(this){
+        return switch(this){
             case PULL_OUT_WEED, GRASS_CUT, LEAF_SLAP -> PokemonAttackType.GRASS;
             case PUSH_SOME_WATER, WATERFALL, CRY -> PokemonAttackType.WATER;
             case POOR_NEUTRAL, PREATTY_NEUTRAL, POWERFULL_NEUTRAL -> PokemonAttackType.NEUTRAL;
             case SPARK, FIREBALL, THROW_CANDLES -> PokemonAttackType.FIRE;
         };
-
-        return attackType;
     }
 
     private int getRawDamagePoints(){
 
-        int damagePoints = switch(this){
+        return switch(this){
 
             case LEAF_SLAP, PUSH_SOME_WATER, POOR_NEUTRAL -> 5;
             case GRASS_CUT -> 15;
@@ -60,8 +56,6 @@ public enum PokemonAttack {
             case PREATTY_NEUTRAL, SPARK -> 10;
             case THROW_CANDLES -> 20;
         };
-
-        return damagePoints;
     }
 
     public int getDamageToType(PokemonType pokemonType) {

@@ -8,12 +8,10 @@ public enum PokemonType {
     @Override
     public String toString(){
 
-        String type = switch(this){
+        return switch(this){
             case FIRE -> "fire";
             case WATER -> "water";
             case GRASS -> "grass";
         };
-
-        return type;
     }
 }

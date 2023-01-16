@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -29,8 +28,7 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
     private VBox fightSceneContainer;
     private VBox middleContainer;
     private String titleText;
-    private final ArrayList<IFightStartObserver> fightStartObservers = new ArrayList();
-    private final ArrayList<IFightEndObserver> fightEndObservers = new ArrayList();
+    private final ArrayList<IFightEndObserver> fightEndObservers = new ArrayList<>();
     static final int FIGHT_SCENE_WIDTH = 1200;
     static final int FIGHT_SCENE_HEIGHT = 700;
     static final int ATTACK_BUTTONS_SPACING = 20;
@@ -53,7 +51,7 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
         createFightScene();
 
         //set background
-        BackgroundImage myBI = new BackgroundImage(new Image("background3.jpg",FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT,false,true),
+        BackgroundImage myBI = new BackgroundImage(new Image("fightBackground.jpg",FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT,false,true),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
 
@@ -78,10 +76,6 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
         fightSceneContainer.setAlignment(Pos.CENTER);
         fightSceneContainer.setSpacing(FIGHT_SCENE_SPACING);
 
-    }
-    private Background getBackgroundOfColor(Color color){
-        BackgroundFill background_fill = new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY);
-        return new Background(background_fill);
     }
     private HBox getPokemonsContainer(){
 
@@ -136,7 +130,7 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
         Button button3 = getAttackButton(2);
 
         VBox attackButtonsContainer = new VBox(button1, button2, button3);
-        attackButtonsContainer.setPrefSize(BUTTON_CONTAINER_WIDTH, BUTTON_CONTAINER_WIDTH);
+        attackButtonsContainer.setPrefSize(BUTTON_CONTAINER_WIDTH, BUTTON_HEIGHT);
 
         attackButtonsContainer.setSpacing(ATTACK_BUTTONS_SPACING);
         attackButtonsContainer.setAlignment(Pos.CENTER);
@@ -163,7 +157,7 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
                 this.fightSceneContainer.getChildren().clear();
                 refreshToEndFightView();
 
-                fightEnded1(myPokemon, wildPokemon);
+                fightEnded(myPokemon, wildPokemon);
             }
             else{
 
@@ -178,7 +172,7 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
                     this.fightSceneContainer.getChildren().clear();
                     refreshToEndFightView();
 
-                    fightEnded1(wildPokemon, myPokemon);
+                    fightEnded(wildPokemon, myPokemon);
                 }
 
                 //fight still in progress
@@ -208,18 +202,15 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
     public void addFightEndObserver(IFightEndObserver observer){
         fightEndObservers.add(observer);
     }
-    public void addFightStartObserver(IFightStartObserver observer){
-        fightStartObservers.add(observer);
-    }
     @Override
-    public void fightEnded1(Pokemon winner, Pokemon looser) {
+    public void fightEnded(Pokemon winner, Pokemon looser) {
         for(IFightEndObserver observer : fightEndObservers){
-            observer.fightEnded1(winner, looser);
+            observer.fightEnded(winner, looser);
         }
     }
 
     @Override
-    public void fightStart(Pokemon myPokemon, Pokemon wildPokemon) {
+    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
         this.myPokemon = myPokemon;
         this.wildPokemon = wildPokemon;
 

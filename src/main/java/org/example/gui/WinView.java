@@ -48,7 +48,7 @@ public class WinView implements IFightEndObserver {
         return box;
     }
     @Override
-    public void fightEnded1(Pokemon winner, Pokemon looser) {
+    public void fightEnded(Pokemon winner, Pokemon looser) {
         if(Objects.equals(firstBoss, looser)){
             getWinScene();
         }

@@ -2,5 +2,5 @@ package org.example;
 
 public interface IFightEndObserver {
 
-    void fightEnded1(Pokemon winner, Pokemon looser);
+    void fightEnded(Pokemon winner, Pokemon looser);
 }

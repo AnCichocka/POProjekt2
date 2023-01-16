@@ -10,11 +10,10 @@ public enum ObstacleType {
 
     public String getImagePath(){
 
-        String path = switch (this){
+        return switch (this){
             case ROCK -> "src/main/resources/rock.png";
             case PUDDLE -> "src/main/resources/puddle.png";
         };
-        return path;
     }
 
     public static ObstacleType getRandomObstacleType()  {

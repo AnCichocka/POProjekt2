@@ -30,7 +30,6 @@ public class App extends Application implements IFightStartObserver, IFightEndOb
 
             fightView.addFightEndObserver(this.map);
             fightView.addFightEndObserver(this);
-            fightView.addFightStartObserver(this);
 
             WinView winView = new WinView(map.getBossPokemon());
             fightView.addFightEndObserver(winView);
@@ -86,13 +85,13 @@ public class App extends Application implements IFightStartObserver, IFightEndOb
     }
 
     @Override
-    public void fightEnded1(Pokemon winner, Pokemon looser) {
+    public void fightEnded(Pokemon winner, Pokemon looser) {
         fightInProgress = false;
         this.mapView.refresh();
     }
 
     @Override
-    public void fightStart(Pokemon myPokemon, Pokemon wildPokemon) {
+    public void fightStarted(Pokemon myPokemon, Pokemon wildPokemon) {
         fightInProgress = true;
     }
 }

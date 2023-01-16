@@ -5,6 +5,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.example.IMapElement;
@@ -23,6 +24,7 @@ public class MapView {
     private final Pokemon myPokemon;
     private final Color MY_POKEMON_COLOR = Color.YELLOW;
     private final Color BOSS_POKEMON_COLOR = Color.ORANGE;
+    private final Color GRID_PANE_COLOR = Color.rgb(98,239,145);
 
     public MapView(int width, int height, Map map){
         this.height = height;
@@ -33,15 +35,21 @@ public class MapView {
     public Scene getMapScene(){
         this.gridPane = new GridPane();
         this.gridPane.setAlignment(Pos.CENTER);
+        this.gridPane.setBackground(getBackgroundOfColor(GRID_PANE_COLOR));
 
-        System.out.println(map);
+        int scene_width = CELL_SIZE*width;
+        int scene_height = CELL_SIZE*height;
 
+        BackgroundImage myBI = new BackgroundImage(new Image("mapBackground.png",scene_width, scene_height,false,true),
+                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+
+        gridPane.setBackground(new Background(myBI));
 
         this.createScene();
         addAnimalsAndGrass();
 
-        Scene scene = new Scene(this.gridPane, CELL_SIZE*width, CELL_SIZE*height);
-        return scene;
+        return new Scene(this.gridPane, scene_width, scene_height);
     }
     public void createScene(){
 
