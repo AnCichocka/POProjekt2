@@ -43,6 +43,7 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
     static final int TITLE_FONT_SIZE = 40;
     static final int BUTTON_CONTAINER_WIDTH = 200;
     static final int BUTTON_HEIGHT = 30;
+    static final String FIGHT_BACKGROUND = "fightBackground.jpg";
     public void getFightScene(){
 
         this.fightSceneContainer = new VBox();
@@ -51,7 +52,7 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
         createFightScene();
 
         //set background
-        BackgroundImage myBI = new BackgroundImage(new Image("fightBackground.jpg",FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT,false,true),
+        BackgroundImage myBI = new BackgroundImage(new Image(FIGHT_BACKGROUND, FIGHT_SCENE_WIDTH, FIGHT_SCENE_HEIGHT,false,true),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
 
@@ -168,7 +169,7 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
 
                 //you loose
                 if(myPokemon.isDead()){
-                    this.titleText = "YOU LOSE THIS FIGHT";
+                    this.titleText = "YOU LOST THIS FIGHT";
                     this.fightSceneContainer.getChildren().clear();
                     refreshToEndFightView();
 
@@ -214,7 +215,7 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
         this.myPokemon = myPokemon;
         this.wildPokemon = wildPokemon;
 
-        System.out.println(myPokemon.getLevel());
+        //System.out.println(myPokemon.getLevel());
 
         this.myPokemonLife = myPokemon.getLeftLifePoints();
         this.wildPokemonLife = wildPokemon.getLeftLifePoints();

@@ -25,6 +25,7 @@ public class MapView {
     private final Color MY_POKEMON_COLOR = Color.YELLOW;
     private final Color BOSS_POKEMON_COLOR = Color.ORANGE;
     private final Color GRID_PANE_COLOR = Color.rgb(98,239,145);
+    static final String MAP_BACKGROUND = "mapBackground.png";
 
     public MapView(int width, int height, Map map){
         this.height = height;
@@ -40,7 +41,7 @@ public class MapView {
         int scene_width = CELL_SIZE*width;
         int scene_height = CELL_SIZE*height;
 
-        BackgroundImage myBI = new BackgroundImage(new Image("mapBackground.png",scene_width, scene_height,false,true),
+        BackgroundImage myBI = new BackgroundImage(new Image(MAP_BACKGROUND,scene_width, scene_height,false,true),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
 
