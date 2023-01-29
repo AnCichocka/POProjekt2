@@ -166,14 +166,11 @@ public class Map implements IPositionChangeObserver, IFightEndObserver{
     @Override
     public void fightEnded(Pokemon winner, Pokemon looser) {
 
-        System.out.println("MAP HEARD END-----------------------------------------------");
+        //System.out.println("MAP HEARD END-----------------------------------------------");
 
-        winner.regenerateAfterFight();
-        looser.regenerateAfterFight();
-
-        System.out.println("WINNER: " + winner.getLeftLifePoints());
-        System.out.println("LOOSER: " + looser.getLeftLifePoints());
-        System.out.println();
+        //System.out.println("WINNER: " + winner.getLeftLifePoints());
+        //System.out.println("LOOSER: " + looser.getLeftLifePoints());
+        //System.out.println();
 
         if(Objects.equals(myPokemon, looser)){
             this.myPokemon.lostFight();
@@ -190,5 +187,8 @@ public class Map implements IPositionChangeObserver, IFightEndObserver{
                 putNewWildPokemonOnMap();
             }
         }
+
+        winner.regenerateAfterFight();
+        looser.regenerateAfterFight();
     }
 }

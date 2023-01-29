@@ -218,9 +218,11 @@ public class FightView implements IFightEndObserver, IFightStartObserver {
         //System.out.println(myPokemon.getLevel());
 
         this.myPokemonLife = myPokemon.getLeftLifePoints();
+        //System.out.println("START MY: " + myPokemonLife + " " + myPokemon.getLevel());
         this.wildPokemonLife = wildPokemon.getLeftLifePoints();
+        //System.out.println("START WILD: " + wildPokemonLife + " " +  wildPokemon.getLevel());
 
-        System.out.println(myPokemon.getLeftLifePoints());
+        //System.out.println(myPokemon.getLeftLifePoints());
 
         getFightScene();
     }

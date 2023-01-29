@@ -49,7 +49,7 @@ public class Pokemon implements IPositionChangeObserver, IMapElement, IFightStar
         System.out.println("DIRECTION: " + direction);
         switch (direction){
             case UP, RIGHT, LEFT, DOWN -> unitVector = direction.toUnitVector();
-            default -> throw new IllegalArgumentException("you idiot enum mistake?");
+            default -> throw new IllegalArgumentException("enum mistake?");
         }
 
         newPosition = newPosition.add(unitVector);
